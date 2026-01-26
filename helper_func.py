@@ -116,10 +116,15 @@ async def get_messages(client, message_ids):
                 chat_id=client.db_channel.id,
                 message_ids=temb_ids
             )
-        except:
-            pass
+        except Exception as e:
+            print(f"Error fetching messages: {e}")
+            msgs = []
+
         total_messages += len(temb_ids)
-        messages.extend(msgs)
+        if isinstance(msgs, list):
+            messages.extend(msgs)
+        else:
+            messages.append(msgs)
     return messages
 
 async def get_message_id(client, message):

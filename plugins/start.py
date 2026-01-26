@@ -115,18 +115,18 @@ async def start_command(client: Client, message: Message):
         argument = string.split("-")
 
         ids = []
-        if len(argument) == 3:
+        if len(argument) == 3 and argument[0] == "get":
             try:
-                start = int(int(argument[1]) / abs(client.db_channel.id))
-                end = int(int(argument[2]) / abs(client.db_channel.id))
+                start = int(int(argument[1]) // abs(client.db_channel.id))
+                end = int(int(argument[2]) // abs(client.db_channel.id))
                 ids = range(start, end + 1) if start <= end else list(range(start, end - 1, -1))
             except Exception as e:
                 print(f"Error decoding IDs: {e}")
                 return
 
-        elif len(argument) == 2:
+        elif len(argument) == 2 and argument[0] == "get":
             try:
-                ids = [int(int(argument[1]) / abs(client.db_channel.id))]
+                ids = [int(int(argument[1]) // abs(client.db_channel.id))]
             except Exception as e:
                 print(f"Error decoding ID: {e}")
                 return
@@ -144,6 +144,9 @@ async def start_command(client: Client, message: Message):
         aloneking_msgs = []
 
         for msg in messages:
+            if not msg or msg.empty or not (msg.document or msg.video or msg.audio or msg.photo or msg.animation or msg.voice or msg.video_note):
+                continue
+
             original_caption = msg.caption.html if msg.caption else ""
             caption = f"{original_caption}\n\n{CUSTOM_CAPTION}" if CUSTOM_CAPTION else original_caption
             reply_markup = msg.reply_markup if DISABLE_CHANNEL_BUTTON else None
