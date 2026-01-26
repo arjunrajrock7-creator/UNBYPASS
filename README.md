@@ -20,6 +20,7 @@ Built for speed, stability, and aesthetics, this bot ensures your files are safe
 - 🏮 **Anime Themed UI:** Dark aesthetics with neon, cyber, and sakura vibes.
 - 🔐 **Secure Storage:** Store private files in authorized channels.
 - 🔗 **Auto Shortener:** Mandatory link shortening for unverified users.
+- 📢 **Unlimited Force Subscribe:** Enforce membership in multiple channels/groups.
 - ⚡ **High Speed:** Built with Pyrogram and Motor for asynchronous performance.
 - 🤖 **Render Ready:** Fully compatible with Render deployment out-of-the-box.
 - 🎟️ **Premium System:** Built-in subscription management for power users.
@@ -48,6 +49,7 @@ Built for speed, stability, and aesthetics, this bot ensures your files are safe
 | `API_HASH` | Your API Hash from my.telegram.org |
 | `DATABASE_URL` | Your MongoDB Connection URI |
 | `CHANNEL_ID` | The ID of your Database Channel |
+| `FORCE_SUB_CHANNELS` | List of Channel IDs for Force Subscribe (Space separated) |
 | `WEB_DOMAIN` | Your Render App URL (e.g., https://app.onrender.com) |
 | `SHORTLINK_URL` | Your Shortener Domain (e.g., arolinks.com) |
 | `SHORTLINK_API` | Your Shortener API Key |

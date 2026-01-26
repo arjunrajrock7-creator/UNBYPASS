@@ -246,7 +246,11 @@ async def not_joined(client: Client, message: Message):
     count = 0
 
     try:
-        all_channels = await db.show_channels()  # Should return list of (chat_id, mode) tuples
+        all_channels = await db.show_channels()
+        for cfg_cid in FORCE_SUB_CHANNELS:
+            if cfg_cid not in all_channels:
+                all_channels.append(cfg_cid)
+
         for total, chat_id in enumerate(all_channels, start=1):
             mode = await db.get_channel_mode(chat_id)  # fetch mode
 
@@ -296,12 +300,17 @@ async def not_joined(client: Client, message: Message):
         try:
             buttons.append([
                 InlineKeyboardButton(
-                    text='♻️ Tʀʏ Aɢᴀɪɴ',
+                    text='⛩️ Vᴇʀɪғʏ / Cʜᴇᴄᴋ Aɢᴀɪɴ',
                     url=f"https://t.me/{client.username}?start={message.command[1]}"
                 )
             ])
-        except IndexError:
-            pass
+        except (IndexError, AttributeError):
+            buttons.append([
+                InlineKeyboardButton(
+                    text='⛩️ Vᴇʀɪғʏ / Cʜᴇᴄᴋ Aɢᴀɪɴ',
+                    url=f"https://t.me/{client.username}?start=help"
+                )
+            ])
 
         await message.reply_photo(
             photo=FORCE_PIC,

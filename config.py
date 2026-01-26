@@ -10,10 +10,11 @@ API_HASH = os.environ.get("API_HASH", "167e960d46363e3098f9c1fc78496adb") #Your 
 #--------------------------------------------
 
 CHANNEL_ID = int(os.environ.get("CHANNEL_ID", "-1003549022692")) #Your db channel Id
+FORCE_SUB_CHANNELS = [int(i) for i in os.environ.get("FORCE_SUB_CHANNELS", "-1003549022692").split()]
 OWNER = os.environ.get("OWNER", "ALONEKINGSTAR77") # Owner username without @
 OWNER_ID = int(os.environ.get("OWNER_ID", "8557029592")) # Owner id
 #--------------------------------------------
-PORT = os.environ.get("PORT", "8001")
+PORT = int(os.environ.get("PORT", "8001"))
 WEB_DOMAIN = os.environ.get("WEB_DOMAIN", "https://your-app-name.onrender.com")
 #--------------------------------------------
 DB_URI = os.environ.get("DATABASE_URL", "mongodb+srv://botskingdom2:t7ognZuINrNfH3tj@cluster0.ystdy4m.mongodb.net/?retryWrites=true&w=majority")

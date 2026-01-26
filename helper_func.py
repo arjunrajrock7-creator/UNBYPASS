@@ -15,18 +15,6 @@ from database.database import *
 
 
 
-# Don't Remove Credit @ALONEKINGSTAR77, @ALONEKINGSTAR77
-# Ask Doubt on telegram @ALONEKINGSTAR77
-#
-# Copyright (C) 2025 by @ALONEKINGSTAR77@ALONEKINGSTAR77, < https://github.com/@ALONEKINGSTAR77 >.
-#
-# This file is part of < https://github.com/@ALONEKINGSTAR77/FileStore > project,
-# and is released under the MIT License.
-# Please see < https://github.com/@ALONEKINGSTAR77/FileStore/blob/master/LICENSE >
-#
-# All rights reserved.
-#
-
 #used for cheking if a user is admin ~Owner also treated as admin level
 async def check_admin(filter, client, update):
     try:
@@ -36,21 +24,13 @@ async def check_admin(filter, client, update):
         print(f"! Exception in check_admin: {e}")
         return False
 
-
-# Don't Remove Credit @ALONEKINGSTAR77, @ALONEKINGSTAR77
-# Ask Doubt on telegram @ALONEKINGSTAR77
-#
-# Copyright (C) 2025 by @ALONEKINGSTAR77@ALONEKINGSTAR77, < https://github.com/@ALONEKINGSTAR77 >.
-#
-# This file is part of < https://github.com/@ALONEKINGSTAR77/FileStore > project,
-# and is released under the MIT License.
-# Please see < https://github.com/@ALONEKINGSTAR77/FileStore/blob/master/LICENSE >
-#
-# All rights reserved.
-#
-
 async def is_subscribed(client, user_id):
     channel_ids = await db.show_channels()
+
+    # Add channels from config if not already in DB list
+    for cfg_cid in FORCE_SUB_CHANNELS:
+        if cfg_cid not in channel_ids:
+            channel_ids.append(cfg_cid)
 
     if not channel_ids:
         return True
@@ -69,19 +49,6 @@ async def is_subscribed(client, user_id):
             return False
 
     return True
-
-
-# Don't Remove Credit @ALONEKINGSTAR77, @ALONEKINGSTAR77
-# Ask Doubt on telegram @ALONEKINGSTAR77
-#
-# Copyright (C) 2025 by @ALONEKINGSTAR77@ALONEKINGSTAR77, < https://github.com/@ALONEKINGSTAR77 >.
-#
-# This file is part of < https://github.com/@ALONEKINGSTAR77/FileStore > project,
-# and is released under the MIT License.
-# Please see < https://github.com/@ALONEKINGSTAR77/FileStore/blob/master/LICENSE >
-#
-# All rights reserved.
-#
 
 async def is_sub(client, user_id, channel_id):
     try:
@@ -164,7 +131,7 @@ async def get_message_id(client, message):
     elif message.forward_sender_name:
         return 0
     elif message.text:
-        pattern = "https://t.me/(?:c/)?(.*)/(\d+)"
+        pattern = r"https://t.me/(?:c/)?(.*)/(\d+)"
         matches = re.match(pattern,message.text)
         if not matches:
             return 0

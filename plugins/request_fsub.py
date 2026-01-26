@@ -184,7 +184,7 @@ async def del_force_sub(client: Client, message: Message):
         if not all_channels:
             return await temp.edit("<b>❌ No force-sub channels found.</b>")
         for ch_id in all_channels:
-            await db.del_channel(ch_id)
+            await db.rem_channel(ch_id)
         return await temp.edit("<b>✅ All force-sub channels have been removed.</b>")
 
     try:
