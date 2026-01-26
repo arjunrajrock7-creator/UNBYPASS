@@ -141,37 +141,38 @@ async def start_command(client: Client, message: Message):
         finally:
             await temp_msg.delete()
 
-        aloneking_msgs = []
-
-        for msg in messages:
-            if not msg or msg.empty or not (msg.document or msg.video or msg.audio or msg.photo or msg.animation or msg.voice or msg.video_note):
-                continue
-
+        async def send_msg(msg):
             original_caption = msg.caption.html if msg.caption else ""
             caption = f"{original_caption}\n\n{CUSTOM_CAPTION}" if CUSTOM_CAPTION else original_caption
             reply_markup = msg.reply_markup if DISABLE_CHANNEL_BUTTON else None
-
             try:
-                snt_msg = await msg.copy(
+                return await msg.copy(
                     chat_id=message.from_user.id,
                     caption=caption,
                     parse_mode=ParseMode.HTML,
                     reply_markup=reply_markup,
                     protect_content=PROTECT_CONTENT
                 )
-                aloneking_msgs.append(snt_msg)
             except FloodWait as e:
                 await asyncio.sleep(e.x)
-                copied_msg = await msg.copy(
+                return await msg.copy(
                     chat_id=message.from_user.id,
                     caption=caption,
                     parse_mode=ParseMode.HTML,
                     reply_markup=reply_markup,
                     protect_content=PROTECT_CONTENT
                 )
-                aloneking_msgs.append(copied_msg)
             except:
-                pass
+                return None
+
+        tasks = []
+        for msg in messages:
+            if not msg or msg.empty or not (msg.document or msg.video or msg.audio or msg.photo or msg.animation or msg.voice or msg.video_note or msg.sticker or msg.text):
+                continue
+            tasks.append(send_msg(msg))
+
+        results = await asyncio.gather(*tasks)
+        aloneking_msgs = [r for r in results if r]
 
         if FILE_AUTO_DELETE > 0:
             notification_msg = await message.reply(
