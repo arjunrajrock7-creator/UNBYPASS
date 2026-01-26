@@ -38,7 +38,58 @@ SHORTENER_PIC = os.environ.get("SHORTENER_PIC", "https://freeimage.host/i/fr18bp
 #--------------------------------------------
 
 #--------------------------------------------
-HELP_TXT = "<b><blockquote>⛩️ ᴛʜɪs ɪs ᴀɴ ғɪʟᴇ ᴛᴏ ʟɪɴᴋ ʙᴏᴛ ᴡᴏʀᴋ ғᴏʀ @ALONEKINGSTAR77\n\n❏ ʙᴏᴛ ᴄᴏᴍᴍᴀɴᴅs\n├/start : sᴛᴀʀᴛ ᴛʜᴇ ʙᴏᴛ\n├/about : ᴏᴜʀ ɪɴғᴏʀᴍᴀᴛɪᴏɴ\n└/help : ʜᴇʟᴘ ʀᴇʟᴀᴛᴇᴅ ʙᴏᴛ\n\n🌸 sɪᴍᴘʟʏ ᴄʟɪᴄᴋ ᴏɴ ʟɪɴᴋ ᴀɴᴅ sᴛᴀʀᴛ ᴛʜᴇ ʙᴏᴛ ᴊᴏɪɴ ʙᴏᴛʜ ᴄʜᴀɴɴᴇʟs ᴀɴᴅ ᴛʀʏ ᴀɢᴀɪɴ ᴛʜᴀᴛs ɪᴛ.....!\n\n🏮 ᴅᴇᴠᴇʟᴏᴘᴇᴅ ʙʏ <a href=https://t.me/anixzone>ᴀʟᴏɴᴇᴋɪɴɢsᴛᴀʀ77</a></blockquote></b>"
+HELP_TXT = """<b><blockquote>⛩️ ᴛʜɪs ɪs ᴀɴ ғɪʟᴇ ᴛᴏ ʟɪɴᴋ ʙᴏᴛ ᴡᴏʀᴋ ғᴏʀ @ALONEKINGSTAR77
+
+❏ ʙᴏᴛ ᴄᴏᴍᴍᴀɴᴅs
+├ /start : sᴛᴀʀᴛ ᴛʜᴇ ʙᴏᴛ
+├ /about : ᴏᴜʀ ɪɴғᴏʀᴍᴀᴛɪᴏɴ
+└ /help : ʜᴇʟᴘ ʀᴇʟᴀᴛᴇᴅ ʙᴏᴛ
+
+🌸 sɪᴍᴘʟʏ ᴄʟɪᴄᴋ ᴏɴ ʟɪɴᴋ ᴀɴᴅ sᴛᴀʀᴛ ᴛʜᴇ ʙᴏᴛ ᴊᴏɪɴ ʙᴏᴛʜ ᴄʜᴀɴɴᴇʟs ᴀɴᴅ ᴛʀʏ ᴀɢᴀɪɴ ᴛʜᴀᴛs ɪᴛ.....!
+
+🏮 ᴅᴇᴠᴇʟᴏᴘᴇᴅ ʙʏ <a href=https://t.me/anixzone>ᴀʟᴏɴᴇᴋɪɴɢsᴛᴀʀ77</a></blockquote></b>"""
+
+ADMIN_HELP_TXT = """<b><blockquote>⛩️ ᴀᴅᴍɪɴ ᴄᴏᴍᴍᴀɴᴅs
+
+❏ ʟɪɴᴋ ɢᴇɴᴇʀᴀᴛɪᴏɴ
+├ /genlink : ɢᴇɴᴇʀᴀᴛᴇ sɪɴɢʟᴇ ʟɪɴᴋ
+├ /batch : ɢᴇɴᴇʀᴀᴛᴇ ʙᴀᴛᴄʜ ʟɪɴᴋ
+└ /custom_batch : ɢᴇɴᴇʀᴀᴛᴇ ᴄᴜsᴛᴏᴍ ʙᴀᴛᴄʜ
+
+❏ ᴜsᴇʀ ᴍᴀɴᴀɢᴇᴍᴇɴᴛ
+├ /ban : ʙᴀɴ ᴀ ᴜsᴇʀ
+├ /unban : ᴜɴʙᴀɴ ᴀ ᴜsᴇʀ
+└ /users : sʜᴏᴡ ᴀʟʟ ᴜsᴇʀs
+
+❏ ʙʀᴏᴀᴅᴄᴀsᴛ
+└ /broadcast : sᴇɴᴅ ᴍᴇssᴀɢᴇ ᴛᴏ ᴀʟʟ ᴜsᴇʀs
+
+🏮 ᴘᴏᴡᴇʀᴇᴅ ʙʏ <a href=https://t.me/anixzone>ᴀʟᴏɴᴇᴋɪɴɢsᴛᴀʀ77</a></blockquote></b>"""
+
+CMD_TXT = """<b><blockquote>⛩️ ᴀᴅᴍɪɴ ᴄᴏᴍᴍᴀɴᴅs ʟɪsᴛ
+
+❏ ᴜsᴇʀ ᴍᴀɴᴀɢᴇᴍᴇɴᴛ
+├ /ban : ʙᴀɴ ᴀ ᴜsᴇʀ
+├ /unban : ᴜɴʙᴀɴ ᴀ ᴜsᴇʀ
+├ /users : sʜᴏᴡ ᴀʟʟ ᴜsᴇʀs
+└ /premium_users : sʜᴏᴡ ᴀʟʟ ᴘʀᴇᴍɪᴜᴍ ᴜsᴇʀs
+
+❏ ʟɪɴᴋ ᴍᴀɴᴀɢᴇᴍᴇɴᴛ
+├ /addchnl : ᴀᴅᴅ ғsᴜʙ ᴄʜᴀɴɴᴇʟ
+├ /delchnl : ᴅᴇʟᴇᴛᴇ ғsᴜʙ ᴄʜᴀɴɴᴇʟ
+├ /listchnl : ʟɪsᴛ ᴀʟʟ ᴄʜᴀɴɴᴇʟs
+├ /fsub_mode : ᴛᴏɢɢʟᴇ ʀᴇǫᴜᴇsᴛ ᴍᴏᴅᴇ
+├ /genlink : ɢᴇɴᴇʀᴀᴛᴇ sɪɴɢʟᴇ ʟɪɴᴋ
+├ /batch : ɢᴇɴᴇʀᴀᴛᴇ ʙᴀᴛᴄʜ ʟɪɴᴋ
+└ /custom_batch : ɢᴇɴᴇʀᴀᴛᴇ ᴄᴜsᴛᴏᴍ ʙᴀᴛᴄʜ
+
+❏ sʏsᴛᴇᴍ
+├ /stats : sʜᴏᴡ ʙᴏᴛ sᴛᴀᴛs
+├ /broadcast : sᴇɴᴅ ᴍᴇssᴀɢᴇ ᴛᴏ ᴀʟʟ
+└ /addpremium : ᴀᴅᴅ ᴘʀᴇᴍɪᴜᴍ ᴜsᴇʀ
+
+🏮 ᴘᴏᴡᴇʀᴇᴅ ʙʏ <a href=https://t.me/anixzone>ᴀʟᴏɴᴇᴋɪɴɢsᴛᴀʀ77</a></blockquote></b>"""
+
 ABOUT_TXT = (
     "<b><blockquote>"
     "🍥 <u>ʙᴏᴛ ɪɴғᴏ</u> 🍥\n\n"

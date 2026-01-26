@@ -47,7 +47,7 @@ async def add_admins(client: Client, message: Message):
             continue
 
         id = str(id)
-        if id.isdigit() and len(id) == 10:
+        if id.isdigit() and 7 <= len(id) <= 15:
             admin_list += f"<b><blockquote>(ID: <code>{id}</code>) added.</blockquote></b>\n"
             check += 1
         else:

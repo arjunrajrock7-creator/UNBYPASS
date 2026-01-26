@@ -61,7 +61,7 @@ async def add_banuser(client: Client, message: Message):
             report += f"⚠️ Aʟʀᴇᴀᴅʏ : <code>{uid_int}</code>\n"
             continue
 
-        if len(str(uid_int)) == 10:
+        if 7 <= len(str(uid_int)) <= 15:
             await db.add_ban_user(uid_int)
             report += f"✅ Bᴀɴɴᴇᴅ: <code>{uid_int}</code>\n"
             success_count += 1
