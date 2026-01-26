@@ -14,7 +14,7 @@ OWNER = os.environ.get("OWNER", "ALONEKINGSTAR77") # Owner username without @
 OWNER_ID = int(os.environ.get("OWNER_ID", "8557029592")) # Owner id
 #--------------------------------------------
 PORT = os.environ.get("PORT", "8001")
-WEB_DOMAIN = os.environ.get("WEB_DOMAIN", "https://your-app-name.onrender.com")
+WEB_DOMAIN = os.environ.get("WEB_DOMAIN", "https://filestore-n1pi.onrender.com")
 #--------------------------------------------
 DB_URI = os.environ.get("DATABASE_URL", "mongodb+srv://botskingdom2:t7ognZuINrNfH3tj@cluster0.ystdy4m.mongodb.net/?retryWrites=true&w=majority")
 DB_NAME = os.environ.get("DATABASE_NAME", "Cluster0")
