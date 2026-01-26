@@ -14,7 +14,7 @@ OWNER = os.environ.get("OWNER", "ALONEKINGSTAR77") # Owner username without @
 OWNER_ID = int(os.environ.get("OWNER_ID", "8557029592")) # Owner id
 #--------------------------------------------
 PORT = os.environ.get("PORT", "8001")
-WEB_DOMAIN = os.environ.get("WEB_DOMAIN", "https://filestore-n1pi.onrender.com")
+WEB_DOMAIN = os.environ.get("WEB_DOMAIN", "https://your-app-name.onrender.com")
 #--------------------------------------------
 DB_URI = os.environ.get("DATABASE_URL", "mongodb+srv://botskingdom2:t7ognZuINrNfH3tj@cluster0.ystdy4m.mongodb.net/?retryWrites=true&w=majority")
 DB_NAME = os.environ.get("DATABASE_NAME", "Cluster0")
@@ -70,9 +70,6 @@ FORCE_MSG = os.environ.get(
     "🌸 <i>ᴛʜᴀɴᴋ ʏᴏᴜ ꜰᴏʀ ꜱᴜᴘᴘᴏʀᴛɪɴɢ</i>"
     "</blockquote></b>"
 )
-
-RECAPTCHA_SITE_KEY = os.environ.get("RECAPTCHA_SITE_KEY", "6Ld_6KcqAAAAAI5_V6_v_V6_V6_V6_V6_V6_V6") # Placeholder
-RECAPTCHA_SECRET_KEY = os.environ.get("RECAPTCHA_SECRET_KEY", "")
 
 #--------------------------------------------
 CUSTOM_CAPTION = os.environ.get("CUSTOM_CAPTION", "<b>• ʙʏ @ALONEKINGSTAR77</b>")

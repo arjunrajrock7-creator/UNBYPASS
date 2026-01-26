@@ -1,6 +1,6 @@
 from aiohttp import web
 import aiohttp
-from config import RECAPTCHA_SITE_KEY, RECAPTCHA_SECRET_KEY, OWNER
+from config import OWNER
 
 routes = web.RouteTableDef()
 
@@ -21,7 +21,6 @@ async def verify_page(request):
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Verification | @ALONEKINGSTAR77</title>
-        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
         <style>
             body {{
                 margin: 0;
@@ -59,10 +58,6 @@ async def verify_page(request):
                 font-size: 16px;
                 color: #00ffff;
             }}
-            .g-recaptcha {{
-                display: inline-block;
-                margin-bottom: 20px;
-            }}
             button {{
                 background: transparent;
                 border: 2px solid #ff00ff;
@@ -81,16 +76,6 @@ async def verify_page(request):
                 color: white;
                 box-shadow: 0 0 20px #ff00ff;
             }}
-            .sakura {{
-                position: absolute;
-                top: -10%;
-                left: 50%;
-                width: 100%;
-                height: 100%;
-                pointer-events: none;
-                z-index: -1;
-            }}
-            /* Basic Anime Vibes */
             .container::before {{
                 content: "⛩️";
                 font-size: 50px;
@@ -106,11 +91,9 @@ async def verify_page(request):
     <body>
         <div class="container">
             <h1>SYSTEM VERIFICATION</h1>
-            <p>Prove you are not a Baka! Solve the challenge to access your file.</p>
+            <p>Prove you are not a Baka! Click the button to access your file.</p>
             <form action="/verify_token" method="POST">
                 <input type="hidden" name="payload" value="{payload}">
-                <div class="g-recaptcha" data-sitekey="{RECAPTCHA_SITE_KEY}"></div>
-                <br>
                 <button type="submit">UNLOCK FILE</button>
             </form>
         </div>
@@ -123,23 +106,9 @@ async def verify_page(request):
 async def verify_token(request):
     data = await request.post()
     payload = data.get("payload")
-    recaptcha_response = data.get("g-recaptcha-response")
 
-    if not RECAPTCHA_SECRET_KEY:
-        # If no secret key, skip verification for now (development mode)
-        return web.HTTPFound(f"https://t.me/{(await request.app['bot'].get_me()).username}?start=yu3elk{payload}7")
+    if not payload:
+        return web.Response(text="Invalid Request", status=400)
 
-    # Verify with Google
-    verify_url = "https://www.google.com/recaptcha/api/siteverify"
-    async with aiohttp.ClientSession() as session:
-        async with session.post(verify_url, data={
-            "secret": RECAPTCHA_SECRET_KEY,
-            "response": recaptcha_response
-        }) as resp:
-            response = await resp.json()
-
-    if response.get("success"):
-        bot_username = (await request.app['bot'].get_me()).username
-        return web.HTTPFound(f"https://t.me/{bot_username}?start=yu3elk{payload}7")
-    else:
-        return web.Response(text="Verification Failed! Go back and try again.", status=403)
+    bot_username = (await request.app['bot'].get_me()).username
+    return web.HTTPFound(f"https://t.me/{bot_username}?start=yu3elk{payload}7")

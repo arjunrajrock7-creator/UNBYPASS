@@ -14,13 +14,12 @@
 ## 🌸 OVERVIEW
 Welcome to the **@ALONEKINGSTAR77 File Store Bot**. This is a premium, high-performance Telegram bot designed specifically for secure file storage and link shortening with an advanced **Anime Themed Verification Flow**.
 
-Built for speed, stability, and aesthetics, this bot ensures your files are safe while providing a seamless user experience with Google reCAPTCHA protection.
+Built for speed, stability, and aesthetics, this bot ensures your files are safe while providing a seamless user experience with a specialized verification flow.
 
 ## ✨ FEATURES
 - 🏮 **Anime Themed UI:** Dark aesthetics with neon, cyber, and sakura vibes.
 - 🔐 **Secure Storage:** Store private files in authorized channels.
 - 🔗 **Auto Shortener:** Mandatory link shortening for unverified users.
-- 🛡️ **reCAPTCHA Protection:** Integrated Google reCAPTCHA to prevent botting.
 - ⚡ **High Speed:** Built with Pyrogram and Motor for asynchronous performance.
 - 🤖 **Render Ready:** Fully compatible with Render deployment out-of-the-box.
 - 🎟️ **Premium System:** Built-in subscription management for power users.
@@ -52,8 +51,6 @@ Built for speed, stability, and aesthetics, this bot ensures your files are safe
 | `WEB_DOMAIN` | Your Render App URL (e.g., https://app.onrender.com) |
 | `SHORTLINK_URL` | Your Shortener Domain (e.g., arolinks.com) |
 | `SHORTLINK_API` | Your Shortener API Key |
-| `RECAPTCHA_SITE_KEY` | Your Google reCAPTCHA Site Key |
-| `RECAPTCHA_SECRET_KEY` | Your Google reCAPTCHA Secret Key |
 
 ## 👑 CREDITS
 - **Owner:** HEMANTH
