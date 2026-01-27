@@ -1,6 +1,6 @@
 from aiohttp import web
 import aiohttp
-from config import OWNER
+from config import OWNER, RECAPTCHA_SITE_KEY, RECAPTCHA_SECRET_KEY
 
 routes = web.RouteTableDef()
 
@@ -13,6 +13,13 @@ async def verify_page(request):
     payload = request.query.get("payload")
     if not payload:
         return web.Response(text="Missing payload", status=400)
+
+    recaptcha_widget = ""
+    if RECAPTCHA_SITE_KEY:
+        recaptcha_widget = f"""
+        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+        <div class="g-recaptcha" data-sitekey="{RECAPTCHA_SITE_KEY}" data-theme="dark" style="display: flex; justify-content: center; margin-bottom: 20px;"></div>
+        """
 
     html_content = f"""
     <!DOCTYPE html>
@@ -94,6 +101,7 @@ async def verify_page(request):
             <p>Prove you are not a Baka! Click the button to access your file.</p>
             <form action="/verify_token" method="POST">
                 <input type="hidden" name="payload" value="{payload}">
+                {recaptcha_widget}
                 <button type="submit">UNLOCK FILE</button>
             </form>
         </div>
@@ -109,6 +117,20 @@ async def verify_token(request):
 
     if not payload:
         return web.Response(text="Invalid Request", status=400)
+
+    if RECAPTCHA_SECRET_KEY:
+        recaptcha_response = data.get("g-recaptcha-response")
+        if not recaptcha_response:
+            return web.Response(text="Please complete the reCAPTCHA", status=400)
+
+        async with aiohttp.ClientSession() as session:
+            async with session.post("https://www.google.com/recaptcha/api/siteverify", data={
+                "secret": RECAPTCHA_SECRET_KEY,
+                "response": recaptcha_response
+            }) as resp:
+                result = await resp.json()
+                if not result.get("success"):
+                    return web.Response(text="reCAPTCHA verification failed", status=400)
 
     bot_username = (await request.app['bot'].get_me()).username
     return web.HTTPFound(f"https://t.me/{bot_username}?start=yu3elk{payload}7")

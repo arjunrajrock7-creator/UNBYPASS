@@ -166,14 +166,13 @@ async def start_command(client: Client, message: Message):
             except:
                 return None
 
-        tasks = []
+        aloneking_msgs = []
         for msg in messages:
             if not msg or msg.empty or not (msg.document or msg.video or msg.audio or msg.photo or msg.animation or msg.voice or msg.video_note or msg.sticker or msg.text):
                 continue
-            tasks.append(send_msg(msg))
-
-        results = await asyncio.gather(*tasks)
-        aloneking_msgs = [r for r in results if r]
+            snt_msg = await send_msg(msg)
+            if snt_msg:
+                aloneking_msgs.append(snt_msg)
 
         if FILE_AUTO_DELETE > 0:
             notification_msg = await message.reply(
