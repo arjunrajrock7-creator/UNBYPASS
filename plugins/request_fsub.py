@@ -135,15 +135,15 @@ async def add_force_sub(client: Client, message: Message):
         if chat.type not in [ChatType.CHANNEL, ChatType.SUPERGROUP]:
             return await temp.edit("❌ Only channels/supergroups allowed.")
 
-        bot_member = await client.get_chat_member(chat.id, "me")
+        bot_member = await client.get_chat_member(chat.id, client.me.id)
         if bot_member.status not in [ChatMemberStatus.ADMINISTRATOR, ChatMemberStatus.OWNER]:
             return await temp.edit("❌ Bot must be admin in that chat.")
 
         # Try to get invite link
         try:
-            link = await client.export_chat_invite_link(chat.id)
+            link = chat.invite_link or await client.export_chat_invite_link(chat.id)
         except Exception:
-            link = f"https://t.me/{chat.username}" if chat.username else f"https://t.me/anixzone{str(chat.id)[4:]}"
+            link = f"https://t.me/{chat.username}" if chat.username else f"https://t.me/c/{str(chat_id)[4:]}"
 
         await db.add_channel(chat_id)
         return await temp.edit(
