@@ -4,9 +4,9 @@ from pytz import timezone
 from datetime import datetime, timedelta
 
 # Create an async client with Motor
-dbclient = motor.motor_asyncio.AsyncIOMotorClient(DB_URI)
-database = dbclient[DB_NAME]
-collection = database['premium-users']
+dbclient = motor.motor_asyncio.AsyncIOMotorClient(DB_URI) if DB_URI else None
+database = dbclient[DB_NAME] if dbclient else None
+collection = database['premium-users'] if database is not None else None
 
 # Check if the user is a premium user
 async def is_premium_user(user_id):

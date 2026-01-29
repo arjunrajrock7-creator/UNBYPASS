@@ -65,6 +65,9 @@ class Bot(Client):
         self.LOGGER = LOGGER
 
     async def start(self):
+        if not DB_URI:
+            self.LOGGER(__name__).critical("DATABASE_URL is not set! Please set it in environment variables.")
+            sys.exit()
         await super().start()
         scheduler.start()
         usr_bot_me = await self.get_me()

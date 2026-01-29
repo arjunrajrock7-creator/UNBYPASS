@@ -9,8 +9,12 @@ from config import DB_URI, DB_NAME
 import logging
 from datetime import datetime, timedelta
 
-dbclient = pymongo.MongoClient(DB_URI)
-database = dbclient[DB_NAME]
+if DB_URI:
+    dbclient = pymongo.MongoClient(DB_URI)
+    database = dbclient[DB_NAME]
+else:
+    dbclient = None
+    database = None
 
 logging.basicConfig(level=logging.INFO)
 
@@ -37,19 +41,19 @@ def new_user(id):
 class HEMANTH:
 
     def __init__(self, DB_URI, DB_NAME):
-        self.dbclient = motor.motor_asyncio.AsyncIOMotorClient(DB_URI)
-        self.database = self.dbclient[DB_NAME]
+        self.dbclient = motor.motor_asyncio.AsyncIOMotorClient(DB_URI) if DB_URI else None
+        self.database = self.dbclient[DB_NAME] if self.dbclient else None
 
-        self.channel_data = self.database['channels']
-        self.admins_data = self.database['admins']
-        self.user_data = self.database['users']
-        self.sex_data = self.database['sex']
-        self.banned_user_data = self.database['banned_users']
-        self.autho_user_data = self.database['autho_user']
-        self.del_timer_data = self.database['del_timer']
-        self.fsub_data = self.database['fsub']
-        self.rqst_fsub_data = self.database['request_forcesub']
-        self.rqst_fsub_Channel_data = self.database['request_forcesub_channel']
+        self.channel_data = self.database['channels'] if self.database is not None else None
+        self.admins_data = self.database['admins'] if self.database is not None else None
+        self.user_data = self.database['users'] if self.database is not None else None
+        self.sex_data = self.database['sex'] if self.database is not None else None
+        self.banned_user_data = self.database['banned_users'] if self.database is not None else None
+        self.autho_user_data = self.database['autho_user'] if self.database is not None else None
+        self.del_timer_data = self.database['del_timer'] if self.database is not None else None
+        self.fsub_data = self.database['fsub'] if self.database is not None else None
+        self.rqst_fsub_data = self.database['request_forcesub'] if self.database is not None else None
+        self.rqst_fsub_Channel_data = self.database['request_forcesub_channel'] if self.database is not None else None
 
 
 
