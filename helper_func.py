@@ -12,6 +12,8 @@ from pyrogram.errors.exceptions.bad_request_400 import UserNotParticipant
 from shortzy import Shortzy
 from pyrogram.errors import FloodWait
 from database.database import *
+from database.db_premium import is_premium_user
+from datetime import datetime
 
 
 
@@ -23,6 +25,24 @@ async def check_admin(filter, client, update):
     except Exception as e:
         print(f"! Exception in check_admin: {e}")
         return False
+
+admin = filters.create(check_admin)
+
+async def is_verified_filter(filter, client, update):
+    user_id = update.from_user.id
+    if await db.ban_user_exist(user_id):
+        return False
+    return await is_user_verified(user_id)
+
+verified = filters.create(is_verified_filter)
+
+async def ban_filter(filter, client, update):
+    user_id = update.from_user.id
+    if user_id == OWNER_ID or await db.admin_exist(user_id):
+        return True
+    return not await db.ban_user_exist(user_id)
+
+unbanned = filters.create(ban_filter)
 
 async def is_subscribed(client, user_id):
     channel_ids = await db.show_channels()
@@ -202,8 +222,41 @@ async def get_shortlink(url, api, link):
     return link
 
 
+async def is_user_verified(user_id):
+    if user_id == OWNER_ID:
+        return True
+    if await db.admin_exist(user_id):
+        return True
+    if await is_premium_user(user_id):
+        return True
+
+    status = await db.get_verify_status(user_id)
+    if status.get('is_verified'):
+        verified_time = status.get('verified_time', 0)
+        if time.time() - verified_time < 86400:  # 24 hours
+            return True
+    return False
+
+
+async def send_log(client, user_id, username, time_taken, command):
+    if not OWNER_ID:
+        return
+    log_msg = (
+        f"<b>⛩️ Bypass Detected!</b>\n\n"
+        f"👤 <b>User ID:</b> <code>{user_id}</code>\n"
+        f"📧 <b>Username:</b> @{username if username else 'N/A'}\n"
+        f"⏱️ <b>Time Taken:</b> <code>{time_taken:.2f}s</code>\n"
+        f"📂 <b>Command/File:</b> <code>{command}</code>\n"
+        f"📅 <b>Date:</b> <code>{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}</code>\n\n"
+        f"🚫 <b>Action:</b> Permanent Ban"
+    )
+    try:
+        await client.send_message(OWNER_ID, text=log_msg)
+    except Exception as e:
+        print(f"Error sending log to admin: {e}")
+
+
 subscribed = filters.create(is_subscribed)
-admin = filters.create(check_admin)
 
 #@ALONEKINGSTAR77 on Tg :
 

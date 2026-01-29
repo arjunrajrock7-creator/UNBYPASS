@@ -9,8 +9,12 @@ from config import DB_URI, DB_NAME
 import logging
 from datetime import datetime, timedelta
 
-dbclient = pymongo.MongoClient(DB_URI)
-database = dbclient[DB_NAME]
+if DB_URI:
+    dbclient = pymongo.MongoClient(DB_URI)
+    database = dbclient[DB_NAME]
+else:
+    dbclient = None
+    database = None
 
 logging.basicConfig(level=logging.INFO)
 
@@ -18,7 +22,8 @@ default_verify = {
     'is_verified': False,
     'verified_time': 0,
     'verify_token': "",
-    'link': ""
+    'link': "",
+    'verify_start_time': 0
 }
 
 def new_user(id):
@@ -28,26 +33,27 @@ def new_user(id):
             'is_verified': False,
             'verified_time': "",
             'verify_token': "",
-            'link': ""
+            'link': "",
+            'verify_start_time': 0
         }
     }
 
 class HEMANTH:
 
     def __init__(self, DB_URI, DB_NAME):
-        self.dbclient = motor.motor_asyncio.AsyncIOMotorClient(DB_URI)
-        self.database = self.dbclient[DB_NAME]
+        self.dbclient = motor.motor_asyncio.AsyncIOMotorClient(DB_URI) if DB_URI else None
+        self.database = self.dbclient[DB_NAME] if self.dbclient else None
 
-        self.channel_data = self.database['channels']
-        self.admins_data = self.database['admins']
-        self.user_data = self.database['users']
-        self.sex_data = self.database['sex']
-        self.banned_user_data = self.database['banned_user']
-        self.autho_user_data = self.database['autho_user']
-        self.del_timer_data = self.database['del_timer']
-        self.fsub_data = self.database['fsub']
-        self.rqst_fsub_data = self.database['request_forcesub']
-        self.rqst_fsub_Channel_data = self.database['request_forcesub_channel']
+        self.channel_data = self.database['channels'] if self.database is not None else None
+        self.admins_data = self.database['admins'] if self.database is not None else None
+        self.user_data = self.database['users'] if self.database is not None else None
+        self.sex_data = self.database['sex'] if self.database is not None else None
+        self.banned_user_data = self.database['banned_users'] if self.database is not None else None
+        self.autho_user_data = self.database['autho_user'] if self.database is not None else None
+        self.del_timer_data = self.database['del_timer'] if self.database is not None else None
+        self.fsub_data = self.database['fsub'] if self.database is not None else None
+        self.rqst_fsub_data = self.database['request_forcesub'] if self.database is not None else None
+        self.rqst_fsub_Channel_data = self.database['request_forcesub_channel'] if self.database is not None else None
 
 
 
@@ -234,6 +240,25 @@ class HEMANTH:
         current['verified_time'] = verified_time
         current['link'] = link
         await self.db_update_verify_status(user_id, current)
+
+    async def update_verify_start_time(self, user_id, start_time):
+        current = await self.db_verify_status(user_id)
+        current['verify_start_time'] = start_time
+        await self.db_update_verify_status(user_id, current)
+
+    async def update_verify_token(self, user_id, token):
+        current = await self.db_verify_status(user_id)
+        current['verify_token'] = token
+        await self.db_update_verify_status(user_id, current)
+
+    async def reset_all_verification_status(self):
+        await self.user_data.update_many(
+            {},
+            {'$set': {'verify_status.is_verified': False}}
+        )
+
+    async def reset_verify_status(self, user_id):
+        await self.user_data.update_one({'_id': user_id}, {'$set': {'verify_status': default_verify}})
 
     # Set verify count (overwrite with new value)
     async def set_verify_count(self, user_id: int, count: int):

@@ -12,10 +12,20 @@ from bot import Bot
 from config import *
 from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
 from database.database import *
+from helper_func import *
 
 @Bot.on_callback_query()
 async def cb_handler(client: Bot, query: CallbackQuery):
+    user_id = query.from_user.id
+    if await db.ban_user_exist(user_id):
+        return await query.answer("Bypass detected. You are permanently banned.", show_alert=True)
+
     data = query.data
+
+    # Allow these without verification
+    if data not in ["help", "about", "close", "start"]:
+        if not await is_user_verified(user_id):
+            return await query.answer("Please verify first using the link from /start", show_alert=True)
 
     if data == "help":
         await query.message.edit_text(

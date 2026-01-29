@@ -13,6 +13,7 @@
 import asyncio
 import os
 import random
+import secrets
 import sys
 import re
 import string
@@ -37,12 +38,15 @@ TUT_VID = f"{TUT_VID}"
 
 async def short_url(client: Client, message: Message, base64_string):
     try:
-        verify_url = f"{WEB_DOMAIN}/verify?payload={base64_string}"
-        short_link = await get_shortlink(SHORTLINK_URL, SHORTLINK_API, verify_url)
+        user_id = message.from_user.id
+        token = secrets.token_hex(8)
+        await db.update_verify_token(user_id, token)
+
+        go_url = f"{WEB_DOMAIN}/go?user_id={user_id}&token={token}&payload={base64_string}"
 
         buttons = [
             [
-                InlineKeyboardButton(text="ᴅᴏᴡɴʟᴏᴀᴅ", url=short_link),
+                InlineKeyboardButton(text="ᴅᴏᴡɴʟᴏᴀᴅ", url=go_url),
                 InlineKeyboardButton(text="ᴛᴜᴛᴏʀɪᴀʟ", url=TUT_VID)
             ],
             [
@@ -61,7 +65,7 @@ async def short_url(client: Client, message: Message, base64_string):
         pass
 
 
-@Bot.on_message(filters.command('start') & filters.private)
+@Bot.on_message(filters.command('start') & filters.private & unbanned)
 async def start_command(client: Client, message: Message):
     user_id = message.from_user.id
     id = message.from_user.id
@@ -78,17 +82,6 @@ async def start_command(client: Client, message: Message):
     if not await is_subscribed(client, user_id):
         return await not_joined(client, message)
 
-    # Check if user is banned
-    banned_users = await db.get_ban_users()
-    if user_id in banned_users:
-        return await message.reply_text(
-            "<b>⛔️ You are Bᴀɴɴᴇᴅ from using this bot.</b>\n\n"
-            "<i>Contact support if you think this is a mistake.</i>",
-            reply_markup=InlineKeyboardMarkup(
-                [[InlineKeyboardButton("Contact Support", url=BAN_SUPPORT)]]
-            )
-        )
-
     # File auto-delete time in seconds
     FILE_AUTO_DELETE = await db.get_del_timer()
 
@@ -101,10 +94,26 @@ async def start_command(client: Client, message: Message):
             if basic.startswith("yu3elk"):
                 # Extract base64 between 'yu3elk' and the last character
                 base64_string = basic[6:-1]
+
+                # Verification bypass detection
+                verify_status = await db.get_verify_status(user_id)
+                start_time = verify_status.get('verify_start_time', 0)
+
+                # If no start time or under 60 seconds, it's a bypass
+                time_taken = time.time() - start_time if start_time else 0
+                if not start_time or time_taken < 60:
+                    await db.add_ban_user(user_id)
+                    await send_log(client, user_id, message.from_user.username, time_taken, f"Bypass Link: {base64_string}")
+                    return await message.reply_text("<b>Bypass detected. You are permanently banned.</b>")
+
+                # Mark as verified and clear token/start_time
+                await db.update_verify_status(user_id, is_verified=True, verified_time=time.time())
+                await db.update_verify_token(user_id, "")
+                await db.update_verify_start_time(user_id, 0)
             else:
                 base64_string = basic
 
-            if not is_premium and user_id != OWNER_ID and not basic.startswith("yu3elk"):
+            if not await is_user_verified(user_id):
                 # Redirect to shortener + verification
                 await short_url(client, message, base64_string)
                 return
@@ -336,7 +345,31 @@ async def not_joined(client: Client, message: Message):
 
 #=====================================================================================##
 
-@Bot.on_message(filters.command('myplan') & filters.private)
+@Bot.on_message(filters.command('reset_short') & filters.private & unbanned)
+async def reset_short_command(client: Client, message: Message):
+    user_id = message.from_user.id
+
+    # Admin mode: /reset_short <user_id>
+    if len(message.command) > 1 and await check_admin(None, client, message):
+        try:
+            target_user_id = int(message.command[1])
+            await db.reset_verify_status(target_user_id)
+            return await message.reply_text(f"Shortener reset for user_id: {target_user_id}")
+        except ValueError:
+            return await message.reply_text("Invalid user ID.")
+
+    # Normal user mode
+    verify_status = await db.get_verify_status(user_id)
+    # Check if anything is set in verify_status that isn't the default
+    if not verify_status.get('is_verified') and not verify_status.get('verify_token') and not verify_status.get('verify_start_time'):
+        return await message.reply_text("You have no active shortener session to reset.")
+
+    await db.reset_verify_status(user_id)
+    await message.reply_text("Shortener verification has been reset. Please solve shortener again to get files.")
+
+#=====================================================================================##
+
+@Bot.on_message(filters.command('myplan') & filters.private & unbanned)
 async def check_plan(client: Client, message: Message):
     user_id = message.from_user.id  # Get user ID from the message
 
@@ -348,7 +381,7 @@ async def check_plan(client: Client, message: Message):
 
 #=====================================================================================##
 # Command to add premium user
-@Bot.on_message(filters.command('addpremium') & filters.private & admin)
+@Bot.on_message(filters.command('addpremium') & filters.private & admin & unbanned)
 async def add_premium_user_command(client, msg):
     if len(msg.command) != 4:
         await msg.reply_text(
@@ -398,7 +431,7 @@ async def add_premium_user_command(client, msg):
 
 
 # Command to remove premium user
-@Bot.on_message(filters.command('remove_premium') & filters.private & admin)
+@Bot.on_message(filters.command('remove_premium') & filters.private & admin & unbanned)
 async def pre_remove_user(client: Client, msg: Message):
     if len(msg.command) != 2:
         await msg.reply_text("useage: /remove_premium user_id ")
@@ -412,7 +445,7 @@ async def pre_remove_user(client: Client, msg: Message):
 
 
 # Command to list active premium users
-@Bot.on_message(filters.command('premium_users') & filters.private & admin)
+@Bot.on_message(filters.command('premium_users') & filters.private & admin & unbanned)
 async def list_premium_users_command(client, message):
     # Define IST timezone
     ist = timezone("Asia/Kolkata")
@@ -475,7 +508,7 @@ async def list_premium_users_command(client, message):
 
 #=====================================================================================##
 
-@Bot.on_message(filters.command("count") & filters.private & admin)
+@Bot.on_message(filters.command("count") & filters.private & admin & unbanned)
 async def total_verify_count_cmd(client, message: Message):
     total = await db.get_total_verify_count()
     await message.reply_text(f"Tᴏᴛᴀʟ ᴠᴇʀɪғɪᴇᴅ ᴛᴏᴋᴇɴs ᴛᴏᴅᴀʏ: <b>{total}</b>")
@@ -483,7 +516,7 @@ async def total_verify_count_cmd(client, message: Message):
 
 #=====================================================================================##
 
-@Bot.on_message(filters.command('commands') & filters.private & admin)
+@Bot.on_message(filters.command('commands') & filters.private & admin & unbanned)
 async def bcmd(bot: Bot, message: Message):
     reply_markup = InlineKeyboardMarkup([[InlineKeyboardButton("• ᴄʟᴏsᴇ •", callback_data = "close")]])
     await message.reply(text=CMD_TXT, reply_markup = reply_markup, quote= True)

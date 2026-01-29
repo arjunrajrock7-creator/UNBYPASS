@@ -15,7 +15,7 @@ OWNER = os.environ.get("OWNER", "ALONEKINGSTAR77") # Owner username without @
 OWNER_ID = int(os.environ.get("OWNER_ID", "8557029592")) # Owner id
 #--------------------------------------------
 PORT = int(os.environ.get("PORT", "8001"))
-WEB_DOMAIN = os.environ.get("WEB_DOMAIN", "https://your-app-name.onrender.com")
+WEB_DOMAIN = os.environ.get("WEB_DOMAIN", "https://filestore-1-6na6.onrender.com")
 #--------------------------------------------
 DB_URI = os.environ.get("DATABASE_URL", "mongodb+srv://botskingdom2:t7ognZuINrNfH3tj@cluster0.ystdy4m.mongodb.net/?retryWrites=true&w=majority")
 DB_NAME = os.environ.get("DATABASE_NAME", "Cluster0")
@@ -61,6 +61,7 @@ ADMIN_HELP_TXT = """<b><blockquote>⛩️ ᴀᴅᴍɪɴ ᴄᴏᴍᴍᴀɴᴅs
 ❏ ᴜsᴇʀ ᴍᴀɴᴀɢᴇᴍᴇɴᴛ
 ├ /ban : ʙᴀɴ ᴀ ᴜsᴇʀ
 ├ /unban : ᴜɴʙᴀɴ ᴀ ᴜsᴇʀ
+├ /reset_short : ʀᴇsᴇᴛ ᴜsᴇʀ sʜᴏʀᴛɴᴇʀ
 └ /users : sʜᴏᴡ ᴀʟʟ ᴜsᴇʀs
 
 ❏ ʙʀᴏᴀᴅᴄᴀsᴛ
@@ -73,6 +74,7 @@ CMD_TXT = """<b><blockquote>⛩️ ᴀᴅᴍɪɴ ᴄᴏᴍᴍᴀɴᴅs ʟɪsᴛ
 ❏ ᴜsᴇʀ ᴍᴀɴᴀɢᴇᴍᴇɴᴛ
 ├ /ban : ʙᴀɴ ᴀ ᴜsᴇʀ
 ├ /unban : ᴜɴʙᴀɴ ᴀ ᴜsᴇʀ
+├ /reset_short : ʀᴇsᴇᴛ ᴜsᴇʀ sʜᴏʀᴛɴᴇʀ
 ├ /users : sʜᴏᴡ ᴀʟʟ ᴜsᴇʀs
 └ /premium_users : sʜᴏᴡ ᴀʟʟ ᴘʀᴇᴍɪᴜᴍ ᴜsᴇʀs
 
