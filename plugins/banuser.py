@@ -31,6 +31,8 @@ from database.database import *
 #BAN-USER-SYSTEM
 @Bot.on_message(filters.private & filters.command('ban') & admin)
 async def add_banuser(client: Client, message: Message):
+    if await db.ban_user_exist(message.from_user.id):
+        return await message.reply_text("<b>Bypass detected. You are permanently banned.</b>")
     pro = await message.reply("⏳ <i>Pʀᴏᴄᴇssɪɴɢ ʀᴇǫᴜᴇsᴛ...</i>", quote=True)
     banuser_ids = await db.get_ban_users()
     banusers = message.text.split()[1:]
@@ -75,6 +77,8 @@ async def add_banuser(client: Client, message: Message):
 
 @Bot.on_message(filters.private & filters.command('unban') & admin)
 async def delete_banuser(client: Client, message: Message):
+    if await db.ban_user_exist(message.from_user.id):
+        return await message.reply_text("<b>Bypass detected. You are permanently banned.</b>")
     pro = await message.reply("⏳ <i>Pʀᴏᴄᴇssɪɴɢ ʀᴇǫᴜᴇsᴛ...</i>", quote=True)
     banuser_ids = await db.get_ban_users()
     banusers = message.text.split()[1:]
@@ -116,6 +120,8 @@ async def delete_banuser(client: Client, message: Message):
 
 @Bot.on_message(filters.private & filters.command('banlist') & admin)
 async def get_banuser_list(client: Client, message: Message):
+    if await db.ban_user_exist(message.from_user.id):
+        return await message.reply_text("<b>Bypass detected. You are permanently banned.</b>")
     pro = await message.reply("⏳ <i>Fᴇᴛᴄʜɪɴɢ Bᴀɴ Lɪsᴛ...</i>", quote=True)
     banuser_ids = await db.get_ban_users()
 

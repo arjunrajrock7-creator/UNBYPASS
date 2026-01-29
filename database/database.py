@@ -18,7 +18,8 @@ default_verify = {
     'is_verified': False,
     'verified_time': 0,
     'verify_token': "",
-    'link': ""
+    'link': "",
+    'verify_start_time': 0
 }
 
 def new_user(id):
@@ -28,7 +29,8 @@ def new_user(id):
             'is_verified': False,
             'verified_time': "",
             'verify_token': "",
-            'link': ""
+            'link': "",
+            'verify_start_time': 0
         }
     }
 
@@ -42,7 +44,7 @@ class HEMANTH:
         self.admins_data = self.database['admins']
         self.user_data = self.database['users']
         self.sex_data = self.database['sex']
-        self.banned_user_data = self.database['banned_user']
+        self.banned_user_data = self.database['banned_users']
         self.autho_user_data = self.database['autho_user']
         self.del_timer_data = self.database['del_timer']
         self.fsub_data = self.database['fsub']
@@ -234,6 +236,17 @@ class HEMANTH:
         current['verified_time'] = verified_time
         current['link'] = link
         await self.db_update_verify_status(user_id, current)
+
+    async def update_verify_start_time(self, user_id, start_time):
+        current = await self.db_verify_status(user_id)
+        current['verify_start_time'] = start_time
+        await self.db_update_verify_status(user_id, current)
+
+    async def reset_all_verification_status(self):
+        await self.user_data.update_many(
+            {},
+            {'$set': {'verify_status.is_verified': False}}
+        )
 
     # Set verify count (overwrite with new value)
     async def set_verify_count(self, user_id: int, count: int):

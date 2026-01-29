@@ -8,6 +8,8 @@ from helper_func import encode, get_message_id, admin
 
 @Bot.on_message(filters.private & admin & filters.command('batch'))
 async def batch(client: Client, message: Message):
+    if await db.ban_user_exist(message.from_user.id):
+        return await message.reply_text("<b>Bypass detected. You are permanently banned.</b>")
     while True:
         try:
             first_message = await client.ask(
@@ -60,6 +62,8 @@ async def batch(client: Client, message: Message):
 
 @Bot.on_message(filters.private & admin & filters.command('genlink'))
 async def link_generator(client: Client, message: Message):
+    if await db.ban_user_exist(message.from_user.id):
+        return await message.reply_text("<b>Bypass detected. You are permanently banned.</b>")
     while True:
         try:
             channel_message = await client.ask(
@@ -93,6 +97,8 @@ async def link_generator(client: Client, message: Message):
 
 @Bot.on_message(filters.private & admin & filters.command("custom_batch"))
 async def custom_batch(client: Client, message: Message):
+    if await db.ban_user_exist(message.from_user.id):
+        return await message.reply_text("<b>Bypass detected. You are permanently banned.</b>")
     collected = []
     STOP_KEYBOARD = ReplyKeyboardMarkup([["STOP"]], resize_keyboard=True)
 

@@ -37,6 +37,7 @@ TUT_VID = f"{TUT_VID}"
 
 async def short_url(client: Client, message: Message, base64_string):
     try:
+        await db.update_verify_start_time(message.from_user.id, time.time())
         verify_url = f"{WEB_DOMAIN}/verify?payload={base64_string}"
         short_link = await get_shortlink(SHORTLINK_URL, SHORTLINK_API, verify_url)
 
@@ -64,6 +65,11 @@ async def short_url(client: Client, message: Message, base64_string):
 @Bot.on_message(filters.command('start') & filters.private)
 async def start_command(client: Client, message: Message):
     user_id = message.from_user.id
+
+    # Check if user is banned
+    if await db.ban_user_exist(user_id):
+        return await message.reply_text("<b>Bypass detected. You are permanently banned.</b>")
+
     id = message.from_user.id
     is_premium = await is_premium_user(id)
 
@@ -78,17 +84,6 @@ async def start_command(client: Client, message: Message):
     if not await is_subscribed(client, user_id):
         return await not_joined(client, message)
 
-    # Check if user is banned
-    banned_users = await db.get_ban_users()
-    if user_id in banned_users:
-        return await message.reply_text(
-            "<b>⛔️ You are Bᴀɴɴᴇᴅ from using this bot.</b>\n\n"
-            "<i>Contact support if you think this is a mistake.</i>",
-            reply_markup=InlineKeyboardMarkup(
-                [[InlineKeyboardButton("Contact Support", url=BAN_SUPPORT)]]
-            )
-        )
-
     # File auto-delete time in seconds
     FILE_AUTO_DELETE = await db.get_del_timer()
 
@@ -101,10 +96,23 @@ async def start_command(client: Client, message: Message):
             if basic.startswith("yu3elk"):
                 # Extract base64 between 'yu3elk' and the last character
                 base64_string = basic[6:-1]
+
+                # Verification bypass detection
+                verify_status = await db.get_verify_status(user_id)
+                start_time = verify_status.get('verify_start_time', 0)
+                if start_time:
+                    time_taken = time.time() - start_time
+                    if time_taken < 60:
+                        await db.add_ban_user(user_id)
+                        await send_log(client, user_id, message.from_user.username, time_taken, f"Bypass Link: {base64_string}")
+                        return await message.reply_text("<b>Bypass detected. You are permanently banned.</b>")
+
+                # Mark as verified
+                await db.update_verify_status(user_id, is_verified=True, verified_time=time.time())
             else:
                 base64_string = basic
 
-            if not is_premium and user_id != OWNER_ID and not basic.startswith("yu3elk"):
+            if not await is_user_verified(user_id):
                 # Redirect to shortener + verification
                 await short_url(client, message, base64_string)
                 return
@@ -340,6 +348,10 @@ async def not_joined(client: Client, message: Message):
 async def check_plan(client: Client, message: Message):
     user_id = message.from_user.id  # Get user ID from the message
 
+    # Check if user is banned
+    if await db.ban_user_exist(user_id):
+        return await message.reply_text("<b>Bypass detected. You are permanently banned.</b>")
+
     # Get the premium status of the user
     status_message = await check_user_plan(user_id)
 
@@ -350,6 +362,8 @@ async def check_plan(client: Client, message: Message):
 # Command to add premium user
 @Bot.on_message(filters.command('addpremium') & filters.private & admin)
 async def add_premium_user_command(client, msg):
+    if await db.ban_user_exist(msg.from_user.id):
+        return await msg.reply_text("<b>Bypass detected. You are permanently banned.</b>")
     if len(msg.command) != 4:
         await msg.reply_text(
             "Usage: /addpremium <user_id> <time_value> <time_unit>\n\n"
@@ -400,6 +414,8 @@ async def add_premium_user_command(client, msg):
 # Command to remove premium user
 @Bot.on_message(filters.command('remove_premium') & filters.private & admin)
 async def pre_remove_user(client: Client, msg: Message):
+    if await db.ban_user_exist(msg.from_user.id):
+        return await msg.reply_text("<b>Bypass detected. You are permanently banned.</b>")
     if len(msg.command) != 2:
         await msg.reply_text("useage: /remove_premium user_id ")
         return
@@ -414,6 +430,8 @@ async def pre_remove_user(client: Client, msg: Message):
 # Command to list active premium users
 @Bot.on_message(filters.command('premium_users') & filters.private & admin)
 async def list_premium_users_command(client, message):
+    if await db.ban_user_exist(message.from_user.id):
+        return await message.reply_text("<b>Bypass detected. You are permanently banned.</b>")
     # Define IST timezone
     ist = timezone("Asia/Kolkata")
 
@@ -477,6 +495,8 @@ async def list_premium_users_command(client, message):
 
 @Bot.on_message(filters.command("count") & filters.private & admin)
 async def total_verify_count_cmd(client, message: Message):
+    if await db.ban_user_exist(message.from_user.id):
+        return await message.reply_text("<b>Bypass detected. You are permanently banned.</b>")
     total = await db.get_total_verify_count()
     await message.reply_text(f"Tᴏᴛᴀʟ ᴠᴇʀɪғɪᴇᴅ ᴛᴏᴋᴇɴs ᴛᴏᴅᴀʏ: <b>{total}</b>")
 
@@ -485,5 +505,7 @@ async def total_verify_count_cmd(client, message: Message):
 
 @Bot.on_message(filters.command('commands') & filters.private & admin)
 async def bcmd(bot: Bot, message: Message):
+    if await db.ban_user_exist(message.from_user.id):
+        return await message.reply_text("<b>Bypass detected. You are permanently banned.</b>")
     reply_markup = InlineKeyboardMarkup([[InlineKeyboardButton("• ᴄʟᴏsᴇ •", callback_data = "close")]])
     await message.reply(text=CMD_TXT, reply_markup = reply_markup, quote= True)

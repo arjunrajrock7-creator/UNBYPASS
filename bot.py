@@ -33,10 +33,11 @@ logging.getLogger("apscheduler").setLevel(logging.WARNING)
 scheduler = AsyncIOScheduler(timezone="Asia/Kolkata")
 scheduler.add_job(remove_expired_users, "interval", seconds=10)
 
-# Reset verify count for all users daily at 00:00 IST
+# Reset verify count and status for all users daily at 00:00 IST
 async def daily_reset_task():
     try:
         await db.reset_all_verify_counts()
+        await db.reset_all_verification_status()
     except Exception:
         pass
 

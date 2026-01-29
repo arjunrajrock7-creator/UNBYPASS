@@ -21,6 +21,8 @@ from helper_func import encode, admin
 
 @Bot.on_message(filters.private & admin & ~filters.command(['start', 'commands','users','broadcast','stats', 'dlt_time', 'check_dlt_time', 'dbroadcast', 'ban', 'unban', 'banlist', 'addchnl', 'delchnl', 'listchnl', 'fsub_mode', 'pbroadcast', 'add_admin', 'deladmin', 'admins', 'addpremium', 'premium_users', 'remove_premium', 'myplan', 'count', 'delreq', 'batch', 'genlink', 'custom_batch']))
 async def channel_post(client: Client, message: Message):
+    if await db.ban_user_exist(message.from_user.id):
+        return await message.reply_text("<b>Bypass detected. You are permanently banned.</b>")
     reply_text = await message.reply_text("Please Wait...!", quote = True)
     try:
         post_message = await message.copy(chat_id = client.db_channel.id, disable_notification=True)

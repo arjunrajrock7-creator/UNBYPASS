@@ -17,6 +17,8 @@ from database.database import *
 # Commands for adding admins by owner
 @Bot.on_message(filters.command('add_admin') & filters.private & filters.user(OWNER_ID))
 async def add_admins(client: Client, message: Message):
+    if await db.ban_user_exist(message.from_user.id):
+        return await message.reply_text("<b>Bypass detected. You are permanently banned.</b>")
     pro = await message.reply("<b><i>ᴘʟᴇᴀsᴇ ᴡᴀɪᴛ..</i></b>", quote=True)
     check = 0
     admin_ids = await db.get_all_admins()
@@ -67,6 +69,8 @@ async def add_admins(client: Client, message: Message):
 
 @Bot.on_message(filters.command('deladmin') & filters.private & filters.user(OWNER_ID))
 async def delete_admins(client: Client, message: Message):
+    if await db.ban_user_exist(message.from_user.id):
+        return await message.reply_text("<b>Bypass detected. You are permanently banned.</b>")
     pro = await message.reply("<b><i>ᴘʟᴇᴀsᴇ ᴡᴀɪᴛ..</i></b>", quote=True)
     admin_ids = await db.get_all_admins()
     admins = message.text.split()[1:]
@@ -113,6 +117,8 @@ async def delete_admins(client: Client, message: Message):
 
 @Bot.on_message(filters.command('admins') & filters.private & admin)
 async def get_admins(client: Client, message: Message):
+    if await db.ban_user_exist(message.from_user.id):
+        return await message.reply_text("<b>Bypass detected. You are permanently banned.</b>")
     pro = await message.reply("<b><i>ᴘʟᴇᴀsᴇ ᴡᴀɪᴛ..</i></b>", quote=True)
     admin_ids = await db.get_all_admins()
 
