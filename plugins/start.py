@@ -13,6 +13,7 @@
 import asyncio
 import os
 import random
+import secrets
 import sys
 import re
 import string
@@ -37,13 +38,15 @@ TUT_VID = f"{TUT_VID}"
 
 async def short_url(client: Client, message: Message, base64_string):
     try:
-        await db.update_verify_start_time(message.from_user.id, time.time())
-        verify_url = f"{WEB_DOMAIN}/verify?payload={base64_string}"
-        short_link = await get_shortlink(SHORTLINK_URL, SHORTLINK_API, verify_url)
+        user_id = message.from_user.id
+        token = secrets.token_hex(8)
+        await db.update_verify_token(user_id, token)
+
+        go_url = f"{WEB_DOMAIN}/go?user_id={user_id}&token={token}&payload={base64_string}"
 
         buttons = [
             [
-                InlineKeyboardButton(text="ᴅᴏᴡɴʟᴏᴀᴅ", url=short_link),
+                InlineKeyboardButton(text="ᴅᴏᴡɴʟᴏᴀᴅ", url=go_url),
                 InlineKeyboardButton(text="ᴛᴜᴛᴏʀɪᴀʟ", url=TUT_VID)
             ],
             [
@@ -107,8 +110,9 @@ async def start_command(client: Client, message: Message):
                         await send_log(client, user_id, message.from_user.username, time_taken, f"Bypass Link: {base64_string}")
                         return await message.reply_text("<b>Bypass detected. You are permanently banned.</b>")
 
-                # Mark as verified
+                # Mark as verified and clear token
                 await db.update_verify_status(user_id, is_verified=True, verified_time=time.time())
+                await db.update_verify_token(user_id, "")
             else:
                 base64_string = basic
 

@@ -242,6 +242,11 @@ class HEMANTH:
         current['verify_start_time'] = start_time
         await self.db_update_verify_status(user_id, current)
 
+    async def update_verify_token(self, user_id, token):
+        current = await self.db_verify_status(user_id)
+        current['verify_token'] = token
+        await self.db_update_verify_status(user_id, current)
+
     async def reset_all_verification_status(self):
         await self.user_data.update_many(
             {},

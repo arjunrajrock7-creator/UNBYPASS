@@ -1,6 +1,9 @@
 from aiohttp import web
 import aiohttp
-from config import OWNER, RECAPTCHA_SITE_KEY, RECAPTCHA_SECRET_KEY
+import time
+from config import OWNER, RECAPTCHA_SITE_KEY, RECAPTCHA_SECRET_KEY, SHORTLINK_URL, SHORTLINK_API, WEB_DOMAIN
+from database.database import db
+from helper_func import get_shortlink
 
 routes = web.RouteTableDef()
 
@@ -8,11 +11,54 @@ routes = web.RouteTableDef()
 async def root_route_handler(request):
     return web.json_response("@ALONEKINGSTAR77 Shortner")
 
+@routes.get("/go")
+async def go_handler(request):
+    payload = request.query.get("payload")
+    user_id = request.query.get("user_id")
+    token = request.query.get("token")
+
+    if not all([payload, user_id, token]):
+        return web.Response(text="Missing parameters", status=400)
+
+    try:
+        user_id = int(user_id)
+    except ValueError:
+        return web.Response(text="Invalid User ID", status=400)
+
+    if await db.ban_user_exist(user_id):
+        return web.Response(text="Bypass detected. You are permanently banned.", status=403)
+
+    user_status = await db.get_verify_status(user_id)
+    if user_status.get('verify_token') != token:
+        return web.Response(text="Invalid or expired token. Please get a new link from the bot.", status=403)
+
+    # Set verification start time
+    await db.update_verify_start_time(user_id, time.time())
+
+    # Generate shortlink
+    verify_url = f"{WEB_DOMAIN}/verify?payload={payload}&user_id={user_id}"
+    try:
+        shortlink = await get_shortlink(SHORTLINK_URL, SHORTLINK_API, verify_url)
+    except Exception as e:
+        print(f"Error generating shortlink in web route: {e}")
+        # Fallback to direct link if shortener fails (not ideal but keeps it working)
+        return web.HTTPFound(verify_url)
+
+    return web.HTTPFound(shortlink)
+
 @routes.get("/verify")
 async def verify_page(request):
     payload = request.query.get("payload")
+    user_id = request.query.get("user_id")
     if not payload:
         return web.Response(text="Missing payload", status=400)
+
+    if user_id:
+        try:
+            if await db.ban_user_exist(int(user_id)):
+                return web.Response(text="Bypass detected. You are permanently banned.", status=403)
+        except ValueError:
+            pass
 
     recaptcha_widget = ""
     if RECAPTCHA_SITE_KEY:
@@ -101,6 +147,7 @@ async def verify_page(request):
             <p>Prove you are not a Baka! Click the button to access your file.</p>
             <form action="/verify_token" method="POST">
                 <input type="hidden" name="payload" value="{payload}">
+                <input type="hidden" name="user_id" value="{user_id if user_id else ''}">
                 {recaptcha_widget}
                 <button type="submit">UNLOCK FILE</button>
             </form>
@@ -114,9 +161,17 @@ async def verify_page(request):
 async def verify_token(request):
     data = await request.post()
     payload = data.get("payload")
+    user_id = data.get("user_id")
 
     if not payload:
         return web.Response(text="Invalid Request", status=400)
+
+    if user_id:
+        try:
+            if await db.ban_user_exist(int(user_id)):
+                return web.Response(text="Bypass detected. You are permanently banned.", status=403)
+        except ValueError:
+            pass
 
     if RECAPTCHA_SECRET_KEY:
         recaptcha_response = data.get("g-recaptcha-response")
