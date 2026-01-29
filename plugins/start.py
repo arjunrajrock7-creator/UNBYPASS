@@ -98,16 +98,18 @@ async def start_command(client: Client, message: Message):
                 # Verification bypass detection
                 verify_status = await db.get_verify_status(user_id)
                 start_time = verify_status.get('verify_start_time', 0)
-                if start_time:
-                    time_taken = time.time() - start_time
-                    if time_taken < 60:
-                        await db.add_ban_user(user_id)
-                        await send_log(client, user_id, message.from_user.username, time_taken, f"Bypass Link: {base64_string}")
-                        return await message.reply_text("<b>Bypass detected. You are permanently banned.</b>")
 
-                # Mark as verified and clear token
+                # If no start time or under 60 seconds, it's a bypass
+                time_taken = time.time() - start_time if start_time else 0
+                if not start_time or time_taken < 60:
+                    await db.add_ban_user(user_id)
+                    await send_log(client, user_id, message.from_user.username, time_taken, f"Bypass Link: {base64_string}")
+                    return await message.reply_text("<b>Bypass detected. You are permanently banned.</b>")
+
+                # Mark as verified and clear token/start_time
                 await db.update_verify_status(user_id, is_verified=True, verified_time=time.time())
                 await db.update_verify_token(user_id, "")
+                await db.update_verify_start_time(user_id, 0)
             else:
                 base64_string = basic
 

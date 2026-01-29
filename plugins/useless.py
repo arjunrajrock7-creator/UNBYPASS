@@ -30,6 +30,8 @@ from database.database import *
 
 @Bot.on_message(filters.command('stats') & admin & unbanned)
 async def stats(bot: Bot, message: Message):
+    if not await is_user_verified(message.from_user.id):
+        return await message.reply_text("Please verify first.")
     now = datetime.now()
     delta = now - bot.uptime
     time = get_readable_time(delta.seconds)
@@ -45,6 +47,8 @@ WAIT_MSG = "<b>Working....</b>"
 
 @Bot.on_message(filters.command('users') & filters.private & admin & unbanned)
 async def get_users(client: Bot, message: Message):
+    if not await is_user_verified(message.from_user.id):
+        return await message.reply_text("Please verify first.")
     msg = await client.send_message(chat_id=message.chat.id, text=WAIT_MSG)
     users = await db.full_userbase()
     await msg.edit(f"{len(users)} users are using this bot")
@@ -67,6 +71,8 @@ async def get_users(client: Bot, message: Message):
 
 @Bot.on_message(filters.private & filters.command('dlt_time') & admin & unbanned)
 async def set_delete_time(client: Bot, message: Message):
+    if not await is_user_verified(message.from_user.id):
+        return await message.reply_text("Please verify first.")
     try:
         duration = int(message.command[1])
 
@@ -79,6 +85,8 @@ async def set_delete_time(client: Bot, message: Message):
 
 @Bot.on_message(filters.private & filters.command('check_dlt_time') & admin & unbanned)
 async def check_delete_time(client: Bot, message: Message):
+    if not await is_user_verified(message.from_user.id):
+        return await message.reply_text("Please verify first.")
     duration = await db.get_del_timer()
 
     await message.reply(f"<b><blockquote>Cᴜʀʀᴇɴᴛ ᴅᴇʟᴇᴛᴇ ᴛɪᴍᴇʀ ɪs sᴇᴛ ᴛᴏ {duration}sᴇᴄᴏɴᴅs.</blockquote></b>")

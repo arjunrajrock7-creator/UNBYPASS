@@ -15,7 +15,7 @@ OWNER = os.environ.get("OWNER", "ALONEKINGSTAR77") # Owner username without @
 OWNER_ID = int(os.environ.get("OWNER_ID", "8557029592")) # Owner id
 #--------------------------------------------
 PORT = int(os.environ.get("PORT", "8001"))
-WEB_DOMAIN = os.environ.get("WEB_DOMAIN", "https://filestore-1-6na6.onrender.com")
+WEB_DOMAIN = os.environ.get("WEB_DOMAIN", "https://your-app-name.onrender.com")
 #--------------------------------------------
 DB_URI = os.environ.get("DATABASE_URL", "mongodb+srv://botskingdom2:t7ognZuINrNfH3tj@cluster0.ystdy4m.mongodb.net/?retryWrites=true&w=majority")
 DB_NAME = os.environ.get("DATABASE_NAME", "Cluster0")
@@ -31,8 +31,8 @@ FORCE_PIC = os.environ.get("FORCE_PIC", "https://freeimage.host/i/fr18Dv9")
 SHORTLINK_URL = os.environ.get("SHORTLINK_URL", "arolinks.com")
 SHORTLINK_API = os.environ.get("SHORTLINK_API", "e49643875c2fa34dd6087254e58283d65ffc7748")
 TUT_VID = os.environ.get("TUT_VID","https://t.me/anixzone")
-RECAPTCHA_SITE_KEY = os.environ.get("RECAPTCHA_SITE_KEY", "6LeI8FksAAAAAP9BTTfVm1xPNRI-IErC61DPrOTA")
-RECAPTCHA_SECRET_KEY = os.environ.get("RECAPTCHA_SECRET_KEY", "6LeI8FksAAAAAOmTrkDXIyt8D26jAKhruSXAeqwZ")
+RECAPTCHA_SITE_KEY = os.environ.get("RECAPTCHA_SITE_KEY", "")
+RECAPTCHA_SECRET_KEY = os.environ.get("RECAPTCHA_SECRET_KEY", "")
 
 SHORT_MSG = "<b><blockquote>⛩️ Here is Your Download Link\n\nMust Watch Tutorial Before Clicking On Download...</blockquote></b>"
 

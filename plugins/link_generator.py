@@ -4,7 +4,7 @@ import asyncio
 from pyrogram import Client, filters
 from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton, ReplyKeyboardMarkup, ReplyKeyboardRemove
 from bot import Bot
-from helper_func import encode, get_message_id, admin
+from helper_func import *
 
 @Bot.on_message(filters.private & admin & filters.command('batch') & unbanned)
 async def batch(client: Client, message: Message):

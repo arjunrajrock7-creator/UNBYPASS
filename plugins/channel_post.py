@@ -17,7 +17,7 @@ from pyrogram.errors import FloodWait
 
 from bot import Bot
 from config import *
-from helper_func import encode, admin
+from helper_func import *
 
 @Bot.on_message(filters.private & admin & unbanned & ~filters.command(['start', 'commands','users','broadcast','stats', 'dlt_time', 'check_dlt_time', 'dbroadcast', 'ban', 'unban', 'banlist', 'addchnl', 'delchnl', 'listchnl', 'fsub_mode', 'pbroadcast', 'add_admin', 'deladmin', 'admins', 'addpremium', 'premium_users', 'remove_premium', 'myplan', 'count', 'delreq', 'batch', 'genlink', 'custom_batch']))
 async def channel_post(client: Client, message: Message):

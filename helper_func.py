@@ -26,15 +26,23 @@ async def check_admin(filter, client, update):
         print(f"! Exception in check_admin: {e}")
         return False
 
+admin = filters.create(check_admin)
+
 async def is_verified_filter(filter, client, update):
     user_id = update.from_user.id
     if await db.ban_user_exist(user_id):
         return False
     return await is_user_verified(user_id)
 
+verified = filters.create(is_verified_filter)
+
 async def ban_filter(filter, client, update):
     user_id = update.from_user.id
+    if user_id == OWNER_ID or await db.admin_exist(user_id):
+        return True
     return not await db.ban_user_exist(user_id)
+
+unbanned = filters.create(ban_filter)
 
 async def is_subscribed(client, user_id):
     channel_ids = await db.show_channels()
@@ -249,9 +257,6 @@ async def send_log(client, user_id, username, time_taken, command):
 
 
 subscribed = filters.create(is_subscribed)
-admin = filters.create(check_admin)
-verified = filters.create(is_verified_filter)
-unbanned = filters.create(ban_filter)
 
 #@ALONEKINGSTAR77 on Tg :
 
