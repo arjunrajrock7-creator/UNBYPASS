@@ -104,7 +104,7 @@ async def start_command(client: Client, message: Message):
                     if time_taken < 60:
                         await db.add_ban_user(user_id)
                         await send_log(client, user_id, message.from_user.username, time_taken, f"Bypass Link: {base64_string}")
-                        return await message.reply_text("<b>Bypass detected. You are permanently banned.</b>")
+                        return await message.reply_text("<b>Bypass detected. You are permanently banned. IF YOU WANT UNBAN CONTACT OWNER: @ALONEKINGSTAR77</b>")
 
                 # Mark as verified and clear token
                 await db.update_verify_status(user_id, is_verified=True, verified_time=time.time())

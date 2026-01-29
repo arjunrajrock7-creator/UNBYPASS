@@ -26,7 +26,7 @@ async def go_handler(request):
         return web.Response(text="Invalid User ID", status=400)
 
     if await db.ban_user_exist(user_id):
-        return web.Response(text="Bypass detected. You are permanently banned.", status=403)
+        return web.Response(text="Bypass detected. You are permanently banned. IF YOU WANT UNBAN CONTACT OWNER: @ALONEKINGSTAR77", status=403)
 
     user_status = await db.get_verify_status(user_id)
     if user_status.get('verify_token') != token:
@@ -56,7 +56,7 @@ async def verify_page(request):
     if user_id:
         try:
             if await db.ban_user_exist(int(user_id)):
-                return web.Response(text="Bypass detected. You are permanently banned.", status=403)
+                return web.Response(text="Bypass detected. You are permanently banned. IF YOU WANT UNBAN CONTACT OWNER: @ALONEKINGSTAR77", status=403)
         except ValueError:
             pass
 
@@ -176,7 +176,7 @@ async def verify_token(request):
     if user_id:
         try:
             if await db.ban_user_exist(int(user_id)):
-                return web.Response(text="Bypass detected. You are permanently banned.", status=403)
+                return web.Response(text="Bypass detected. You are permanently banned. IF YOU WANT UNBAN CONTACT OWNER: @ALONEKINGSTAR77", status=403)
         except ValueError:
             pass
 

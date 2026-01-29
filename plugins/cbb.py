@@ -18,7 +18,7 @@ from utils.filters import is_user_verified
 async def cb_handler(client: Bot, query: CallbackQuery):
     user_id = query.from_user.id
     if await db.ban_user_exist(user_id):
-        return await query.answer("Bypass detected. You are permanently banned.", show_alert=True)
+        return await query.answer("Bypass detected. You are permanently banned. IF YOU WANT UNBAN CONTACT OWNER: @ALONEKINGSTAR77", show_alert=True)
 
     data = query.data
 
