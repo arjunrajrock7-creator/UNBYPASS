@@ -348,6 +348,34 @@ async def not_joined(client: Client, message: Message):
 
 #=====================================================================================##
 
+@Bot.on_message(filters.command('reset_short') & filters.private)
+async def reset_short_command(client: Client, message: Message):
+    user_id = message.from_user.id
+
+    # Check if user is banned
+    if await db.ban_user_exist(user_id):
+        return await message.reply_text("<b>Bypass detected. You are permanently banned.</b>")
+
+    # Admin mode: /reset_short <user_id>
+    if len(message.command) > 1 and await check_admin(None, client, message):
+        try:
+            target_user_id = int(message.command[1])
+            await db.reset_verify_status(target_user_id)
+            return await message.reply_text(f"Shortener reset for user_id: {target_user_id}")
+        except ValueError:
+            return await message.reply_text("Invalid user ID.")
+
+    # Normal user mode
+    verify_status = await db.get_verify_status(user_id)
+    # Check if anything is set in verify_status that isn't the default
+    if not verify_status.get('is_verified') and not verify_status.get('verify_token') and not verify_status.get('verify_start_time'):
+        return await message.reply_text("You have no active shortener session to reset.")
+
+    await db.reset_verify_status(user_id)
+    await message.reply_text("Shortener verification has been reset. Please solve shortener again to get files.")
+
+#=====================================================================================##
+
 @Bot.on_message(filters.command('myplan') & filters.private)
 async def check_plan(client: Client, message: Message):
     user_id = message.from_user.id  # Get user ID from the message

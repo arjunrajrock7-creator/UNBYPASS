@@ -253,6 +253,9 @@ class HEMANTH:
             {'$set': {'verify_status.is_verified': False}}
         )
 
+    async def reset_verify_status(self, user_id):
+        await self.user_data.update_one({'_id': user_id}, {'$set': {'verify_status': default_verify}})
+
     # Set verify count (overwrite with new value)
     async def set_verify_count(self, user_id: int, count: int):
         await self.sex_data.update_one({'_id': user_id}, {'$set': {'verify_count': count}}, upsert=True)

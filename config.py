@@ -61,6 +61,7 @@ ADMIN_HELP_TXT = """<b><blockquote>⛩️ ᴀᴅᴍɪɴ ᴄᴏᴍᴍᴀɴᴅs
 ❏ ᴜsᴇʀ ᴍᴀɴᴀɢᴇᴍᴇɴᴛ
 ├ /ban : ʙᴀɴ ᴀ ᴜsᴇʀ
 ├ /unban : ᴜɴʙᴀɴ ᴀ ᴜsᴇʀ
+├ /reset_short : ʀᴇsᴇᴛ ᴜsᴇʀ sʜᴏʀᴛɴᴇʀ
 └ /users : sʜᴏᴡ ᴀʟʟ ᴜsᴇʀs
 
 ❏ ʙʀᴏᴀᴅᴄᴀsᴛ
@@ -73,6 +74,7 @@ CMD_TXT = """<b><blockquote>⛩️ ᴀᴅᴍɪɴ ᴄᴏᴍᴍᴀɴᴅs ʟɪsᴛ
 ❏ ᴜsᴇʀ ᴍᴀɴᴀɢᴇᴍᴇɴᴛ
 ├ /ban : ʙᴀɴ ᴀ ᴜsᴇʀ
 ├ /unban : ᴜɴʙᴀɴ ᴀ ᴜsᴇʀ
+├ /reset_short : ʀᴇsᴇᴛ ᴜsᴇʀ sʜᴏʀᴛɴᴇʀ
 ├ /users : sʜᴏᴡ ᴀʟʟ ᴜsᴇʀs
 └ /premium_users : sʜᴏᴡ ᴀʟʟ ᴘʀᴇᴍɪᴜᴍ ᴜsᴇʀs
 
