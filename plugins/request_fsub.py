@@ -36,10 +36,10 @@ from database.database import *
 #
 
 #Request force sub mode commad,,,,,,
-@Bot.on_message(filters.command('fsub_mode') & filters.private & admin)
+@Bot.on_message(filters.command('fsub_mode') & filters.private & admin & unbanned)
 async def change_force_sub_mode(client: Client, message: Message):
-    if await db.ban_user_exist(message.from_user.id):
-        return await message.reply_text("<b>Bypass detected. You are permanently banned.</b>")
+    if not await is_user_verified(message.from_user.id):
+        return await message.reply_text("Please verify first.")
     temp = await message.reply("<b><i>ᴡᴀɪᴛ ᴀ sᴇᴄ..</i></b>", quote=True)
     channels = await db.show_channels()
 
@@ -113,10 +113,10 @@ async def handle_join_request(client, chat_join_request):
 #
 
 # Add channel
-@Bot.on_message(filters.command('addchnl') & filters.private & admin)
+@Bot.on_message(filters.command('addchnl') & filters.private & admin & unbanned)
 async def add_force_sub(client: Client, message: Message):
-    if await db.ban_user_exist(message.from_user.id):
-        return await message.reply_text("<b>Bypass detected. You are permanently banned.</b>")
+    if not await is_user_verified(message.from_user.id):
+        return await message.reply_text("Please verify first.")
     temp = await message.reply("Wait a sec...", quote=True)
     args = message.text.split(maxsplit=1)
 
@@ -175,10 +175,10 @@ async def add_force_sub(client: Client, message: Message):
 #
 
 # Delete channel
-@Bot.on_message(filters.command('delchnl') & filters.private & admin)
+@Bot.on_message(filters.command('delchnl') & filters.private & admin & unbanned)
 async def del_force_sub(client: Client, message: Message):
-    if await db.ban_user_exist(message.from_user.id):
-        return await message.reply_text("<b>Bypass detected. You are permanently banned.</b>")
+    if not await is_user_verified(message.from_user.id):
+        return await message.reply_text("Please verify first.")
     temp = await message.reply("<b><i>ᴡᴀɪᴛ ᴀ sᴇᴄ..</i></b>", quote=True)
     args = message.text.split(maxsplit=1)
     all_channels = await db.show_channels()
@@ -205,10 +205,10 @@ async def del_force_sub(client: Client, message: Message):
         return await temp.edit(f"<b>❌ Channel not found in force-sub list:</b> <code>{ch_id}</code>")
 
 # View all channels
-@Bot.on_message(filters.command('listchnl') & filters.private & admin)
+@Bot.on_message(filters.command('listchnl') & filters.private & admin & unbanned)
 async def list_force_sub_channels(client: Client, message: Message):
-    if await db.ban_user_exist(message.from_user.id):
-        return await message.reply_text("<b>Bypass detected. You are permanently banned.</b>")
+    if not await is_user_verified(message.from_user.id):
+        return await message.reply_text("Please verify first.")
     temp = await message.reply("<b><i>ᴡᴀɪᴛ ᴀ sᴇᴄ..</i></b>", quote=True)
     channels = await db.show_channels()
 
@@ -239,10 +239,10 @@ async def list_force_sub_channels(client: Client, message: Message):
 #
 
 
-@Bot.on_message(filters.command('delreq') & filters.private & admin)
+@Bot.on_message(filters.command('delreq') & filters.private & admin & unbanned)
 async def delete_requested_users(client, message: Message):
-    if await db.ban_user_exist(message.from_user.id):
-        return await message.reply_text("<b>Bypass detected. You are permanently banned.</b>")
+    if not await is_user_verified(message.from_user.id):
+        return await message.reply_text("Please verify first.")
     if len(message.command) < 2:
         return await message.reply("⚠️ Usᴀɢᴇ: `/delreq <channel_id>`", quote=True)
 

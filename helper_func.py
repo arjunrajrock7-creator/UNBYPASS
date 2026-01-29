@@ -26,6 +26,16 @@ async def check_admin(filter, client, update):
         print(f"! Exception in check_admin: {e}")
         return False
 
+async def is_verified_filter(filter, client, update):
+    user_id = update.from_user.id
+    if await db.ban_user_exist(user_id):
+        return False
+    return await is_user_verified(user_id)
+
+async def ban_filter(filter, client, update):
+    user_id = update.from_user.id
+    return not await db.ban_user_exist(user_id)
+
 async def is_subscribed(client, user_id):
     channel_ids = await db.show_channels()
 
@@ -207,6 +217,8 @@ async def get_shortlink(url, api, link):
 async def is_user_verified(user_id):
     if user_id == OWNER_ID:
         return True
+    if await db.admin_exist(user_id):
+        return True
     if await is_premium_user(user_id):
         return True
 
@@ -238,6 +250,8 @@ async def send_log(client, user_id, username, time_taken, command):
 
 subscribed = filters.create(is_subscribed)
 admin = filters.create(check_admin)
+verified = filters.create(is_verified_filter)
+unbanned = filters.create(ban_filter)
 
 #@ALONEKINGSTAR77 on Tg :
 

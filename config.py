@@ -4,20 +4,20 @@ import logging
 from logging.handlers import RotatingFileHandler
 
 #--------------------------------------------
-TG_BOT_TOKEN = os.environ.get("TG_BOT_TOKEN", "8332413341:AAHQrVy628plpp5t-ndXiei1EWDBoifJdnc")
-APP_ID = int(os.environ.get("APP_ID", "31355944")) #Your API ID from my.telegram.org
-API_HASH = os.environ.get("API_HASH", "167e960d46363e3098f9c1fc78496adb") #Your API Hash from my.telegram.org
+TG_BOT_TOKEN = os.environ.get("TG_BOT_TOKEN", "")
+APP_ID = int(os.environ.get("APP_ID", "0")) #Your API ID from my.telegram.org
+API_HASH = os.environ.get("API_HASH", "") #Your API Hash from my.telegram.org
 #--------------------------------------------
 
-CHANNEL_ID = int(os.environ.get("CHANNEL_ID", "-1003834448258")) #Your db channel Id
-FORCE_SUB_CHANNELS = [int(i) for i in os.environ.get("FORCE_SUB_CHANNELS", "-1003558465250").split()]
-OWNER = os.environ.get("OWNER", "ALONEKINGSTAR77") # Owner username without @
-OWNER_ID = int(os.environ.get("OWNER_ID", "8557029592")) # Owner id
+CHANNEL_ID = int(os.environ.get("CHANNEL_ID", "0")) #Your db channel Id
+FORCE_SUB_CHANNELS = [int(i) for i in os.environ.get("FORCE_SUB_CHANNELS", "").split()]
+OWNER = os.environ.get("OWNER", "") # Owner username without @
+OWNER_ID = int(os.environ.get("OWNER_ID", "0")) # Owner id
 #--------------------------------------------
 PORT = int(os.environ.get("PORT", "8001"))
 WEB_DOMAIN = os.environ.get("WEB_DOMAIN", "https://filestore-1-6na6.onrender.com")
 #--------------------------------------------
-DB_URI = os.environ.get("DATABASE_URL", "mongodb+srv://botskingdom2:t7ognZuINrNfH3tj@cluster0.ystdy4m.mongodb.net/?retryWrites=true&w=majority")
+DB_URI = os.environ.get("DATABASE_URL", "")
 DB_NAME = os.environ.get("DATABASE_NAME", "Cluster0")
 #--------------------------------------------
 FSUB_LINK_EXPIRY = int(os.getenv("FSUB_LINK_EXPIRY", "10"))  # 0 means no expiry
@@ -28,11 +28,11 @@ START_PIC = os.environ.get("START_PIC", "https://freeimage.host/i/fr18tY7")
 FORCE_PIC = os.environ.get("FORCE_PIC", "https://freeimage.host/i/fr18Dv9")
 
 #--------------------------------------------
-SHORTLINK_URL = os.environ.get("SHORTLINK_URL", "arolinks.com")
-SHORTLINK_API = os.environ.get("SHORTLINK_API", "e49643875c2fa34dd6087254e58283d65ffc7748")
+SHORTLINK_URL = os.environ.get("SHORTLINK_URL", "")
+SHORTLINK_API = os.environ.get("SHORTLINK_API", "")
 TUT_VID = os.environ.get("TUT_VID","https://t.me/anixzone")
-RECAPTCHA_SITE_KEY = os.environ.get("RECAPTCHA_SITE_KEY", "6LeI8FksAAAAAP9BTTfVm1xPNRI-IErC61DPrOTA")
-RECAPTCHA_SECRET_KEY = os.environ.get("RECAPTCHA_SECRET_KEY", "6LeI8FksAAAAAOmTrkDXIyt8D26jAKhruSXAeqwZ")
+RECAPTCHA_SITE_KEY = os.environ.get("RECAPTCHA_SITE_KEY", "")
+RECAPTCHA_SECRET_KEY = os.environ.get("RECAPTCHA_SECRET_KEY", "")
 
 SHORT_MSG = "<b><blockquote>⛩️ Here is Your Download Link\n\nMust Watch Tutorial Before Clicking On Download...</blockquote></b>"
 

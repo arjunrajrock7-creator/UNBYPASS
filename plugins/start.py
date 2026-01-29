@@ -65,14 +65,9 @@ async def short_url(client: Client, message: Message, base64_string):
         pass
 
 
-@Bot.on_message(filters.command('start') & filters.private)
+@Bot.on_message(filters.command('start') & filters.private & unbanned)
 async def start_command(client: Client, message: Message):
     user_id = message.from_user.id
-
-    # Check if user is banned
-    if await db.ban_user_exist(user_id):
-        return await message.reply_text("<b>Bypass detected. You are permanently banned.</b>")
-
     id = message.from_user.id
     is_premium = await is_premium_user(id)
 
@@ -348,13 +343,9 @@ async def not_joined(client: Client, message: Message):
 
 #=====================================================================================##
 
-@Bot.on_message(filters.command('reset_short') & filters.private)
+@Bot.on_message(filters.command('reset_short') & filters.private & unbanned)
 async def reset_short_command(client: Client, message: Message):
     user_id = message.from_user.id
-
-    # Check if user is banned
-    if await db.ban_user_exist(user_id):
-        return await message.reply_text("<b>Bypass detected. You are permanently banned.</b>")
 
     # Admin mode: /reset_short <user_id>
     if len(message.command) > 1 and await check_admin(None, client, message):
@@ -376,13 +367,9 @@ async def reset_short_command(client: Client, message: Message):
 
 #=====================================================================================##
 
-@Bot.on_message(filters.command('myplan') & filters.private)
+@Bot.on_message(filters.command('myplan') & filters.private & unbanned)
 async def check_plan(client: Client, message: Message):
     user_id = message.from_user.id  # Get user ID from the message
-
-    # Check if user is banned
-    if await db.ban_user_exist(user_id):
-        return await message.reply_text("<b>Bypass detected. You are permanently banned.</b>")
 
     # Get the premium status of the user
     status_message = await check_user_plan(user_id)
@@ -392,10 +379,8 @@ async def check_plan(client: Client, message: Message):
 
 #=====================================================================================##
 # Command to add premium user
-@Bot.on_message(filters.command('addpremium') & filters.private & admin)
+@Bot.on_message(filters.command('addpremium') & filters.private & admin & unbanned)
 async def add_premium_user_command(client, msg):
-    if await db.ban_user_exist(msg.from_user.id):
-        return await msg.reply_text("<b>Bypass detected. You are permanently banned.</b>")
     if len(msg.command) != 4:
         await msg.reply_text(
             "Usage: /addpremium <user_id> <time_value> <time_unit>\n\n"
@@ -444,10 +429,8 @@ async def add_premium_user_command(client, msg):
 
 
 # Command to remove premium user
-@Bot.on_message(filters.command('remove_premium') & filters.private & admin)
+@Bot.on_message(filters.command('remove_premium') & filters.private & admin & unbanned)
 async def pre_remove_user(client: Client, msg: Message):
-    if await db.ban_user_exist(msg.from_user.id):
-        return await msg.reply_text("<b>Bypass detected. You are permanently banned.</b>")
     if len(msg.command) != 2:
         await msg.reply_text("useage: /remove_premium user_id ")
         return
@@ -460,10 +443,8 @@ async def pre_remove_user(client: Client, msg: Message):
 
 
 # Command to list active premium users
-@Bot.on_message(filters.command('premium_users') & filters.private & admin)
+@Bot.on_message(filters.command('premium_users') & filters.private & admin & unbanned)
 async def list_premium_users_command(client, message):
-    if await db.ban_user_exist(message.from_user.id):
-        return await message.reply_text("<b>Bypass detected. You are permanently banned.</b>")
     # Define IST timezone
     ist = timezone("Asia/Kolkata")
 
@@ -525,19 +506,15 @@ async def list_premium_users_command(client, message):
 
 #=====================================================================================##
 
-@Bot.on_message(filters.command("count") & filters.private & admin)
+@Bot.on_message(filters.command("count") & filters.private & admin & unbanned)
 async def total_verify_count_cmd(client, message: Message):
-    if await db.ban_user_exist(message.from_user.id):
-        return await message.reply_text("<b>Bypass detected. You are permanently banned.</b>")
     total = await db.get_total_verify_count()
     await message.reply_text(f"Tᴏᴛᴀʟ ᴠᴇʀɪғɪᴇᴅ ᴛᴏᴋᴇɴs ᴛᴏᴅᴀʏ: <b>{total}</b>")
 
 
 #=====================================================================================##
 
-@Bot.on_message(filters.command('commands') & filters.private & admin)
+@Bot.on_message(filters.command('commands') & filters.private & admin & unbanned)
 async def bcmd(bot: Bot, message: Message):
-    if await db.ban_user_exist(message.from_user.id):
-        return await message.reply_text("<b>Bypass detected. You are permanently banned.</b>")
     reply_markup = InlineKeyboardMarkup([[InlineKeyboardButton("• ᴄʟᴏsᴇ •", callback_data = "close")]])
     await message.reply(text=CMD_TXT, reply_markup = reply_markup, quote= True)

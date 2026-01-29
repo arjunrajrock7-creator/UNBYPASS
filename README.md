@@ -25,6 +25,9 @@ Built for speed, stability, and aesthetics, this bot ensures your files are safe
 - 🤖 **Render Ready:** Fully compatible with Render deployment out-of-the-box.
 - 🎟️ **Premium System:** Built-in subscription management for power users.
 - 🔄 **Auto-Delete:** Settable timer for message auto-deletion.
+- 🛡️ **Anti-Bypass System:** Advanced time-based verification to block bypass tools.
+- 🚫 **Auto-Ban:** Automatically bans users attempting to bypass verification.
+- 🧩 **reCAPTCHA v3:** Invisible Google reCAPTCHA integration for bot protection.
 
 ## 🛠️ TECH STACK
 - **Language:** Python 3.x
@@ -53,6 +56,18 @@ Built for speed, stability, and aesthetics, this bot ensures your files are safe
 | `WEB_DOMAIN` | Your Render App URL (e.g., https://app.onrender.com) |
 | `SHORTLINK_URL` | Your Shortener Domain (e.g., arolinks.com) |
 | `SHORTLINK_API` | Your Shortener API Key |
+| `RECAPTCHA_SITE_KEY` | Google reCAPTCHA v3 Site Key |
+| `RECAPTCHA_SECRET_KEY` | Google reCAPTCHA v3 Secret Key |
+
+## 🤖 COMMANDS
+- `/start` - Start the bot.
+- `/reset_short` - Reset your own shortener verification status.
+- `/help` - Show help information.
+- `/about` - About the bot.
+- `/ban` - (Admin) Ban a user.
+- `/unban` - (Admin) Unban a user.
+- `/banlist` - (Admin) View list of banned users.
+- `/reset_short <user_id>` - (Admin) Reset shortener for a specific user.
 
 ## 👑 CREDITS
 - **Owner:** HEMANTH

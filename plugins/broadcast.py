@@ -34,10 +34,10 @@ REPLY_ERROR = "<code>Use this command as a reply to any telegram message without
 #=====================================================================================##
 
 
-@Bot.on_message(filters.private & filters.command('pbroadcast') & admin)
+@Bot.on_message(filters.private & filters.command('pbroadcast') & admin & unbanned)
 async def send_pin_text(client: Bot, message: Message):
-    if await db.ban_user_exist(message.from_user.id):
-        return await message.reply_text("<b>Bypass detected. You are permanently banned.</b>")
+    if not await is_user_verified(message.from_user.id):
+        return await message.reply_text("Please verify first.")
     if message.reply_to_message:
         query = await db.full_userbase()
         broadcast_msg = message.reply_to_message
@@ -88,10 +88,10 @@ Unsuccessful: <code>{unsuccessful}</code>"""
 #=====================================================================================##
 
 
-@Bot.on_message(filters.private & filters.command('broadcast') & admin)
+@Bot.on_message(filters.private & filters.command('broadcast') & admin & unbanned)
 async def send_text(client: Bot, message: Message):
-    if await db.ban_user_exist(message.from_user.id):
-        return await message.reply_text("<b>Bypass detected. You are permanently banned.</b>")
+    if not await is_user_verified(message.from_user.id):
+        return await message.reply_text("Please verify first.")
     if message.reply_to_message:
         query = await db.full_userbase()
         broadcast_msg = message.reply_to_message
@@ -151,10 +151,10 @@ Unsuccessful: <code>{unsuccessful}</code></b>"""
 
 # broadcast with auto-del
 
-@Bot.on_message(filters.private & filters.command('dbroadcast') & admin)
+@Bot.on_message(filters.private & filters.command('dbroadcast') & admin & unbanned)
 async def delete_broadcast(client: Bot, message: Message):
-    if await db.ban_user_exist(message.from_user.id):
-        return await message.reply_text("<b>Bypass detected. You are permanently banned.</b>")
+    if not await is_user_verified(message.from_user.id):
+        return await message.reply_text("Please verify first.")
     if message.reply_to_message:
         try:
             duration = int(message.command[1])  # Get the duration in seconds
