@@ -63,8 +63,15 @@ async def verify_page(request):
     recaptcha_widget = ""
     if RECAPTCHA_SITE_KEY:
         recaptcha_widget = f"""
-        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-        <div class="g-recaptcha" data-sitekey="{RECAPTCHA_SITE_KEY}" data-theme="dark" style="display: flex; justify-content: center; margin-bottom: 20px;"></div>
+        <script src="https://www.google.com/recaptcha/api.js?render={RECAPTCHA_SITE_KEY}"></script>
+        <input type="hidden" id="g-recaptcha-response" name="g-recaptcha-response">
+        <script>
+            grecaptcha.ready(function() {{
+                grecaptcha.execute('{RECAPTCHA_SITE_KEY}', {{action: 'verify'}}).then(function(token) {{
+                    document.getElementById('g-recaptcha-response').value = token;
+                }});
+            }});
+        </script>
         """
 
     html_content = f"""
@@ -184,8 +191,9 @@ async def verify_token(request):
                 "response": recaptcha_response
             }) as resp:
                 result = await resp.json()
-                if not result.get("success"):
-                    return web.Response(text="reCAPTCHA verification failed", status=400)
+                # For v3, we check success and optionally score
+                if not result.get("success") or result.get("score", 1.0) < 0.5:
+                    return web.Response(text=f"reCAPTCHA verification failed. Score: {result.get('score', 'N/A')}", status=400)
 
     bot_username = (await request.app['bot'].get_me()).username
     return web.HTTPFound(f"https://t.me/{bot_username}?start=yu3elk{payload}7")
