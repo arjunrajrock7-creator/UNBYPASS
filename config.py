@@ -4,24 +4,24 @@ import logging
 from logging.handlers import RotatingFileHandler
 
 #--------------------------------------------
-TG_BOT_TOKEN = os.environ.get("TG_BOT_TOKEN", "8332413341:AAHQrVy628plpp5t-ndXiei1EWDBoifJdnc")
+TG_BOT_TOKEN = os.environ.get("TG_BOT_TOKEN", "8448505270:AAEwd0kQdkYmFbR9hMQQajTLwGj3M1gmIXQ")
 APP_ID = int(os.environ.get("APP_ID", "31355944")) #Your API ID from my.telegram.org
 API_HASH = os.environ.get("API_HASH", "167e960d46363e3098f9c1fc78496adb") #Your API Hash from my.telegram.org
 #--------------------------------------------
 
-CHANNEL_ID = int(os.environ.get("CHANNEL_ID", "-1003834448258")) #Your db channel Id
-FORCE_SUB_CHANNELS = [int(i) for i in os.environ.get("FORCE_SUB_CHANNELS", "-1003834448258").split()]
+CHANNEL_ID = int(os.environ.get("CHANNEL_ID", "-1003444768506")) #Your db channel Id
+FORCE_SUB_CHANNELS = [int(i) for i in os.environ.get("FORCE_SUB_CHANNELS", "-1003558465250").split()]
 OWNER = os.environ.get("OWNER", "ALONEKINGSTAR77") # Owner username without @
 OWNER_ID = int(os.environ.get("OWNER_ID", "8557029592")) # Owner id
 #--------------------------------------------
 PORT = int(os.environ.get("PORT", "8001"))
-WEB_DOMAIN = os.environ.get("WEB_DOMAIN", "https://filestore-1-6na6.onrender.com")
+WEB_DOMAIN = os.environ.get("WEB_DOMAIN", "https://unbypass.onrender.com")
 #--------------------------------------------
 DB_URI = os.environ.get("DATABASE_URL", "mongodb+srv://botskingdom2:t7ognZuINrNfH3tj@cluster0.ystdy4m.mongodb.net/?retryWrites=true&w=majority")
 DB_NAME = os.environ.get("DATABASE_NAME", "Cluster0")
 #--------------------------------------------
 FSUB_LINK_EXPIRY = int(os.getenv("FSUB_LINK_EXPIRY", "10"))  # 0 means no expiry
-BAN_SUPPORT = os.environ.get("BAN_SUPPORT", "https://t.me/anixzone")
+BAN_SUPPORT = os.environ.get("BAN_SUPPORT", "https://t.me/ALONEKINGSTAR77")
 TG_BOT_WORKERS = int(os.environ.get("TG_BOT_WORKERS", "200"))
 #--------------------------------------------
 START_PIC = os.environ.get("START_PIC", "https://freeimage.host/i/fr18tY7")
@@ -30,9 +30,9 @@ FORCE_PIC = os.environ.get("FORCE_PIC", "https://freeimage.host/i/fr18Dv9")
 #--------------------------------------------
 SHORTLINK_URL = os.environ.get("SHORTLINK_URL", "arolinks.com")
 SHORTLINK_API = os.environ.get("SHORTLINK_API", "e49643875c2fa34dd6087254e58283d65ffc7748")
-TUT_VID = os.environ.get("TUT_VID","https://t.me/anixzone")
-RECAPTCHA_SITE_KEY = os.environ.get("RECAPTCHA_SITE_KEY", "")
-RECAPTCHA_SECRET_KEY = os.environ.get("RECAPTCHA_SECRET_KEY", "")
+TUT_VID = os.environ.get("TUT_VID","https://t.me/ALONEKINGSTAR77")
+RECAPTCHA_SITE_KEY = os.environ.get("RECAPTCHA_SITE_KEY", "6LeG81wsAAAAAO03QarsJ_p5Fx3z0BbZdd3G9AHd")
+RECAPTCHA_SECRET_KEY = os.environ.get("RECAPTCHA_SECRET_KEY", "6LeG81wsAAAAAIWI3yuTBoruUiYZ5MD0xB9PExuN")
 
 SHORT_MSG = "<b><blockquote>⛩️ Here is Your Download Link\n\nMust Watch Tutorial Before Clicking On Download...</blockquote></b>"
 
@@ -136,9 +136,9 @@ USER_REPLY_TEXT = "ʙᴀᴋᴋᴀ ! ʏᴏᴜ ᴀʀᴇ ɴᴏᴛ ᴍʏ ꜱᴇɴᴘ
 
 #==========================(BUY PREMIUM)====================#
 OWNER_TAG = os.environ.get("OWNER_TAG", "ALONEKINGSTAR77")
-UPI_ID = os.environ.get("UPI_ID", "aloneking@upi")
+UPI_ID = os.environ.get("UPI_ID", "NONEED@UPI")
 QR_PIC = os.environ.get("QR_PIC", "https://freeimage.host/i/fr18bpe")
-SCREENSHOT_URL = os.environ.get("SCREENSHOT_URL", "https://t.me/anixzone")
+SCREENSHOT_URL = os.environ.get("SCREENSHOT_URL", "https://t.me/ALONEKINGSTAR77")
 
 #Time and its price
 PRICE1 = os.environ.get("PRICE1", "Free")
